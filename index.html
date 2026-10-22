@@ -384,4 +384,57 @@
           <div class="stock-header">
             <div>
               <span class="stock-name">${item.name}</span>
-              <span class="stock-code">${item
+              <span class="stock-code">${item.code}</span>
+            </div>
+            <span class="badge ${item.badge_class}">${item.badge}</span>
+          </div>
+          <div class="stock-desc"><strong>看点：</strong>${item.desc}</div>
+          <button class="btn-block" onclick="openStockDetail(${index})">查看详细介绍 & 关联文章</button>
+        </div>
+      `;
+    });
+
+    function openNewsDetail(index) {
+      const item = newsData[index];
+      showModal(item.title, item.detail, item.related);
+    }
+
+    function openStockDetail(index) {
+      const item = threeStocks[index];
+      showModal(`${item.name} ${item.code} 详细介绍`, item.detail, item.related);
+    }
+
+    function showModal(title, detail, related) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalBody').innerText = detail;
+      
+      let linksHtml = `<div class="related-title">🔗 来自权威媒体的相关资讯：</div>`;
+      related.forEach(link => {
+        linksHtml += `
+          <a href="${link.url}" target="_blank" class="related-link">
+            <span class="source-tag">${link.source}</span> ${link.title}
+          </a>
+        `;
+      });
+      document.getElementById('modalRelated').innerHTML = linksHtml;
+      document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('infoModal').style.display = 'none';
+    }
+
+    // 点击 AI 萌娃小宠物的互动弹窗
+    function openAiPetChat() {
+      showModal(
+        "👧 AI 萌娃理财小助手", 
+        "嗨！爸爸妈妈好呀~ 今天的股市行情和新股资讯都已经整理好啦！\n\n如果想了解更多股票或者有不懂的地方，随时可以让孩子帮您语音查询哦！今天也要稳稳开心呀~", 
+        [
+          { source: "温馨提示", title: "查看今日宏观政策与蓝筹防守策略", url: "#" },
+          { source: "新手理财", title: "了解新股申购基础小知识", url: "#" }
+        ]
+      );
+    }
+  </script>
+</body>
+</html>
