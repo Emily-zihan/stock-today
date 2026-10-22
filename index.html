@@ -127,7 +127,6 @@
     .stock-code { font-size: 14px; color: #64748b; margin-left: 6px; }
     .stock-desc { font-size: 15px; color: #475569; line-height: 1.5; margin-bottom: 12px; }
     
-    /* 单个完整大按钮样式 */
     .btn-block {
       width: 100%;
       background: #eff6ff;
@@ -142,7 +141,6 @@
     }
     .btn-block:active { background: #dbeafe; }
 
-    /* 关联资讯列表 */
     .related-box {
       margin-top: 14px;
       padding-top: 12px;
@@ -159,7 +157,6 @@
     }
     .source-tag { font-size: 11px; background: #e2e8f0; color: #475569; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
 
-    /* 弹窗样式 */
     .modal {
       display: none;
       position: fixed;
@@ -187,18 +184,25 @@
       padding: 12px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
     }
 
+    /* 替换后的 AI 萌娃小宠物样式 */
     .ai-pet {
       position: fixed;
-      right: 20px; bottom: 20px;
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      color: white;
-      width: 60px; height: 60px;
+      right: 16px; bottom: 20px;
+      width: 65px; height: 65px;
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px;
-      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+      background: white;
+      border: 3px solid #ff85a2;
+      box-shadow: 0 8px 20px rgba(255, 133, 162, 0.4);
       cursor: pointer;
       z-index: 999;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    .ai-pet:active { transform: scale(0.92); }
+    .ai-pet img {
+      width: 100%; height: 100%;
+      object-fit: cover;
     }
 
     .footer-tip {
@@ -277,9 +281,7 @@
   <!-- 3. 市场热点与新股关注 (精选3条) -->
   <div class="card">
     <div class="card-title">⭐ 市场热点与新股关注</div>
-    <div class="stock-list" id="stock-list-container">
-      <!-- 动态渲染3条精选新股与热点 -->
-    </div>
+    <div class="stock-list" id="stock-list-container"></div>
   </div>
 
   <div class="footer-tip">
@@ -287,8 +289,11 @@
     <span style="font-size: 12px; opacity: 0.7;">(整合财联社、三大证券报、东方财富、雪球与巨潮资讯网)</span>
   </div>
 
-  <!-- AI 悬浮小宠物 -->
-  <div class="ai-pet" onclick="alert('🤖 AI 小助手：爸妈今天想了解哪只股票？可以直接在交流群问孩子哦！')">🤖</div>
+  <!-- 替换后的 AI 萌娃小宠物悬浮按钮 (点击弹出AI助手对话) -->
+  <div class="ai-pet" onclick="openAiPetChat()" title="点我问股市">
+    <!-- 这里使用你上传的贴纸图片作为头像 -->
+    <img src="https://images.weserv.nl/?url=i.imgur.com/your_image.png" alt="萌娃理财助手" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%23ff85a2\'/><text x=\'50%\' y=\'55%\' font-size=\'24\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'white\'>👧</text></svg>'">
+  </div>
 
   <!-- 通用弹窗组件 -->
   <div class="modal" id="infoModal">
@@ -305,7 +310,6 @@
     document.getElementById('today-date').innerText = 
       `${now.getMonth() + 1}月${now.getDate()}日 Stock-Today`;
 
-    // 要闻数据
     const newsData = [
       {
         title: "芯片巨头业绩超预期，AI算力需求爆发",
@@ -334,7 +338,6 @@
       }
     ];
 
-    // 精选3条新股/热门股票数据
     const threeStocks = [
       {
         name: "中芯国际",
@@ -374,7 +377,6 @@
       }
     ];
 
-    // 渲染3条精选股票
     const container = document.getElementById('stock-list-container');
     threeStocks.forEach((item, index) => {
       container.innerHTML += `
@@ -382,47 +384,4 @@
           <div class="stock-header">
             <div>
               <span class="stock-name">${item.name}</span>
-              <span class="stock-code">${item.code}</span>
-            </div>
-            <span class="badge ${item.badge_class}">${item.badge}</span>
-          </div>
-          <div class="stock-desc"><strong>看点：</strong>${item.desc}</div>
-          <button class="btn-block" onclick="openStockDetail(${index})">查看详细介绍 & 关联文章</button>
-        </div>
-      `;
-    });
-
-    // 弹窗逻辑 - 要闻
-    function openNewsDetail(index) {
-      const item = newsData[index];
-      showModal(item.title, item.detail, item.related);
-    }
-
-    // 弹窗逻辑 - 新股与热点
-    function openStockDetail(index) {
-      const item = threeStocks[index];
-      showModal(`${item.name} ${item.code} 详细介绍`, item.detail, item.related);
-    }
-
-    function showModal(title, detail, related) {
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('modalBody').innerText = detail;
-      
-      let linksHtml = `<div class="related-title">🔗 来自权威媒体的相关资讯：</div>`;
-      related.forEach(link => {
-        linksHtml += `
-          <a href="${link.url}" target="_blank" class="related-link">
-            <span class="source-tag">${link.source}</span> ${link.title}
-          </a>
-        `;
-      });
-      document.getElementById('modalRelated').innerHTML = linksHtml;
-      document.getElementById('infoModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('infoModal').style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+              <span class="stock-code">${item
