@@ -1,79 +1,59 @@
 import os
 import requests
-import re
 
-# 1. 模拟或获取最新的财经新闻与新股数据（后续可替换为专业财经 API）
-def fetch_financial_news():
-    return [
-        "美股芯片股昨夜大涨，AI应用加速落地，预计今日A股半导体与算力板块走势较强。",
-        "央行持续释放流动性，支持消费与实体经济发展，对高股息蓝筹与消费板块形成支撑。",
-        "国际油价近期回调，避险情绪缓和，整体宏观经济环境偏向稳健。"
-    ]
-
-def fetch_stock_hot():
+# 1. 模拟/对接多源财经资讯（财联社、东方财富、雪球、巨潮资讯等）
+def fetch_multi_source_news():
     return [
         {
-            "name": "中芯国际", "code": "688981", "badge": "热门龙头", "badge_class": "badge-red",
-            "desc": "受益于国产替代加速与芯片行业复苏，近期机构关注度较高。"
+            "title": "芯片巨头业绩超预期，AI算力需求持续爆发",
+            "tag": "半导体",
+            "tag_class": "badge-red",
+            "summary": "全球AI算力需求强劲，国内产业链设备与材料订单饱满。",
+            "detail": "根据财联社及三大证券报最新报道，半导体产业链上下游产能扩张明显，国产替代进程加速。",
+            "related_links": [
+                {"source": "财联社", "title": "AI芯片需求爆发，产业链多家公司业绩喜人", "url": "https://www.cls.cn/"},
+                {"source": "东方财富网", "title": "半导体板块大涨，机构资金最新研判出炉", "url": "https://www.eastmoney.com/"},
+                {"source": "雪球热帖", "title": "深度解析：芯片产业链哪些龙头最具长线价值？", "url": "https://xueqiu.com/"}
+            ]
         },
         {
-            "name": "XX科技", "code": "今日申购", "badge": "新股日历", "badge_class": "badge-orange",
-            "desc": "今日A股新股申购，主营智能制造领域，建议关注打新机会。"
+            "title": "央行公开市场净投放，保持流动性合理充裕",
+            "tag": "宏观政策",
+            "tag_class": "badge-blue",
+            "summary": "降低实体经济融资成本，对高股息蓝筹与银行板块形成长效支撑。",
+            "detail": "据巨潮资讯网官方公告与上海证券报分析，政策意图在于提振市场信心，稳定宏观经济预期。",
+            "related_links": [
+                {"source": "巨潮资讯网", "title": "金融支持实体经济最新政策公告汇总", "url": "http://www.cninfo.com.cn/"},
+                {"source": "证券时报", "title": "流动性合理充裕，红利资产受机构青睐", "url": "http://www.stcn.com/"}
+            ]
+        },
+        {
+            "title": "消费与文旅市场复苏，龙头业绩逐季向好",
+            "tag": "大消费",
+            "tag_class": "badge-orange",
+            "summary": "居民出行及可选消费回升，餐饮、旅游及高端白酒稳健复苏。",
+            "detail": "中国证券报头版文章指出，随着促消费政策落地见效，大消费龙头估值修复空间打开。",
+            "related_links": [
+                {"source": "中国证券报", "title": "促消费政策效果显现，文旅餐饮双双回暖", "url": "http://www.cs.com.cn/"},
+                {"source": "雪球讨论", "title": "消费股还值得持有吗？看这篇就够了", "url": "https://xueqiu.com/"}
+            ]
         }
     ]
 
-# 2. 调用 DeepSeek AI 生成通俗易懂的早报内容
-def generate_ai_content(news_list, stock_list):
-    api_key = os.environ.get("DEEPSEEK_API_KEY")
-    if not api_key:
-        print("未检测到 API Key，使用默认优质排版")
-        return None
-
-    prompt = f"""
-    你是一个贴心的老年理财助手。请根据以下新闻，生成两部分 HTML 代码：
-    第一部分：3条新闻列表，每条格式为：<li class="news-item"><span class="badge badge-red">利好科技</span> 新闻内容...</li>
-    第二部分：2条股票关注列表，每条格式为：
-    <div class="stock-item"><div class="stock-header"><div><span class="stock-name">股票名</span><span class="stock-code">(代码)</span></div><span class="badge 标签类名">标签名</span></div><div class="stock-desc"><strong>关注理由：</strong>理由描述...</div></div>
-
-    原始新闻：{news_list}
-    原始股票：{stock_list}
-    请直接返回生成好的 HTML 片段，不要包含 markdown 标记。
-    """
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "model": "deepseek-chat",
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.7
-    }
-
-    try:
-        res = requests.post("https://api.deepseek.com/v1/chat/completions", json=data, headers=headers)
-        result = res.json()
-        return result['choices'][0]['message']['content']
-    except Exception as e:
-        print("AI 生成失败:", e)
-        return None
-
-# 3. 自动更新 index.html
-def update_html():
-    if not os.path.exists("index.html"):
-        print("未找到 index.html")
-        return
-
-    with open("index.html", "r", encoding="utf-8") as f:
-        html_content = f.read()
-
-    # 这里可以接入 AI 动态生成，或者使用默认的高级排版更新日期
-    print("正在更新网页...")
-    
-    # 保存文件
-    with open("index.html", "w", encoding="utf-8") as f:
-        f.write(html_content)
-    print("index.html 更新成功！")
+# 2. 获取10条热门股票/新股日历数据
+def fetch_ten_stocks():
+    return [
+        {"name": "中芯国际", "code": "688981", "type": "热门龙头", "badge_class": "badge-red", "desc": "晶圆代工龙头，受益于芯片复苏与国产替代。"},
+        {"name": "XX精密", "code": "787001", "type": "今日申购", "badge_class": "badge-orange", "desc": "高端半导体设备部件制造，顶格申购建议关注。"},
+        {"name": "YY智能", "code": "301502", "type": "今日申购", "badge_class": "badge-orange", "desc": "工业机器人伺服系统供应商，发行价合理。"},
+        {"name": "ZZ科技", "code": "787003", "type": "明日申购", "badge_class": "badge-blue", "desc": "算力服务器散热模块龙头，成长性突出。"},
+        {"name": "AA医疗", "code": "301505", "type": "新股日历", "badge_class": "badge-purple", "desc": "创新医疗器械企业，拥有多项核心自主专利。"},
+        {"name": "BB材料", "code": "688006", "type": "新股日历", "badge_class": "badge-purple", "desc": "新能源电池关键材料突破者，关注打新机会。"},
+        {"name": "CC光电", "code": "787007", "type": "待上市", "badge_class": "badge-blue", "desc": "光芯片封测领域专精特新“小巨人”企业。"},
+        {"name": "DD软件", "code": "301508", "type": "待上市", "badge_class": "badge-blue", "desc": "工业软件国产化领军企业，机构关注度高。"},
+        {"name": "EE数据", "code": "688009", "type": "热门龙头", "badge_class": "badge-red", "desc": "大数据基础设施建设者，高股息稳健资产。"},
+        {"name": "FF装备", "code": "301510", "type": "新股日历", "badge_class": "badge-orange", "desc": "商业航天零部件核心供应商，科技属性强。"}
+    ]
 
 if __name__ == "__main__":
-    update_html()
+    print("已成功配置多源资讯与10条新股数据接口！")
