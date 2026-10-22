@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>每日理财早报</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d93025">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f4f6f9;
+      color: #1a1a1a;
+      padding: 16px;
+      padding-bottom: 40px;
+    }
+    .header {
+      background: linear-gradient(135deg, #d93025, #b31412);
+      color: white;
+      padding: 20px 16px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(217, 48, 37, 0.2);
+    }
+    .header h1 { font-size: 26px; margin-bottom: 6px; font-weight: bold; }
+    .header p { font-size: 16px; opacity: 0.9; }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      border-left: 5px solid #d93025;
+      padding-left: 10px;
+      margin-bottom: 12px;
+    }
+
+    /* 市场指标大字卡片 */
+    .market-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .market-item {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .market-name { font-size: 16px; color: #666; }
+    .market-val { font-size: 22px; font-weight: bold; margin: 4px 0; }
+    .up { color: #d93025; } /* 涨-红 */
+    .down { color: #188038; } /* 跌-绿 */
+
+    /* 智能解读文本 */
+    .news-list { list-style: none; }
+    .news-item {
+      font-size: 19px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed #eee;
+    }
+    .news-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .tag-up { background: #fce8e6; color: #d93025; padding: 2px 8px; border-radius: 4px; font-size: 15px; font-weight: bold; }
+
+    /* 语音播报按钮 */
+    .audio-btn {
+      width: 100%;
+      background: #07c160;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 12px;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 头部时间 -->
+  <div class="header">
+    <h1 id="today-date">每日理财早报</h1>
+    <p>爸、妈，看这里搞懂今日全球经济与股市变化</p>
+  </div>
+
+  <!-- 语音朗读按钮 -->
+  <button class="audio-btn" onclick="speakNews()">
+    🔊 点击大声朗读今日早报
+  </button>
+
+  <div style="height: 16px;"></div>
+
+  <!-- 隔夜全球股市 -->
+  <div class="card">
+    <div class="card-title">隔夜全球大盘</div>
+    <div class="market-grid">
+      <div class="market-item">
+        <div class="market-name">道琼斯指数</div>
+        <div class="market-val up">+0.52%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">纳斯达克</div>
+        <div class="market-val up">+1.18%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">离岸人民币</div>
+        <div class="market-val down">7.24</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">布伦特原油</div>
+        <div class="market-val down">-0.85%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 大白话解读 -->
+  <div class="card">
+    <div class="card-title">今日核心要闻与行业解读</div>
+    <ul class="news-list" id="news-content">
+      <li class="news-item">
+        <span class="tag-up">利好科技</span> 美股芯片股昨夜大涨，AI 相关板块保持强势，预计今日 A 股半导体概念走势较强。
+      </li>
+      <li class="news-item">
+        <span class="tag-up">政策利好</span> 央行今日继续释放流动性，加大对实体经济支持力度，利好银行与基建板块。
+      </li>
+      <li class="news-item">
+        <span class="tag-up">消费提示</span> 离岸人民币汇率保持稳定，大宗商品价格略微回落，整体宏观环境偏暖。
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    // 显示今天日期
+    const now = new Date();
+    document.getElementById('today-date').innerText = 
+      `${now.getMonth() + 1}月${now.getDate()}日 理财早报`;
+
+    // 朗读功能
+    function speakNews() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const text = document.getElementById('news-content').innerText;
+        const msg = new SpeechSynthesisUtterance("爸妈，今天理财早报如下：" + text);
+        msg.rate = 0.9; // 稍微放慢语速
+        msg.lang = 'zh-CN';
+        window.speechSynthesis.speak(msg);
+      } else {
+        alert('您的手机不支持语音朗读');
+      }
+    }
+  </script>
+</body>
+</html>
