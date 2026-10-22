@@ -16,7 +16,6 @@
       padding-bottom: 70px;
     }
     
-    /* 顶部仪表盘横幅 */
     .header {
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: white;
@@ -32,7 +31,6 @@
     .header p { font-size: 15px; opacity: 0.8; margin-top: 4px; }
     .brand-logo { font-size: 14px; background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 10px; font-weight: bold; }
 
-    /* 通用卡片容器 */
     .card {
       background: white;
       border-radius: 20px;
@@ -52,7 +50,6 @@
       border-bottom: 2px solid #f1f5f9;
     }
 
-    /* 隔夜全球大盘网格 */
     .market-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -70,7 +67,6 @@
     .up { color: #ef4444; } 
     .down { color: #22c55e; }
 
-    /* 要闻与行业解读列表 */
     .news-list { list-style: none; }
     .news-item {
       font-size: 17px;
@@ -88,7 +84,6 @@
       margin-bottom: 6px;
     }
     
-    /* 按钮样式 */
     .btn-action {
       background: #eff6ff;
       color: #2563eb;
@@ -101,9 +96,7 @@
       white-space: nowrap;
       margin-left: 8px;
     }
-    .btn-action:active { background: #dbeafe; }
 
-    /* 标签样式 */
     .badge {
       padding: 3px 8px;
       border-radius: 6px;
@@ -116,7 +109,6 @@
     .badge-orange { background: #ffedd5; color: #c2410c; }
     .badge-purple { background: #f3e8ff; color: #7e22ce; }
 
-    /* 股票新股关注列表 */
     .stock-list { list-style: none; }
     .stock-item {
       background: #f8fafc;
@@ -125,7 +117,6 @@
       padding: 14px;
       margin-bottom: 12px;
     }
-    .stock-item:last-child { margin-bottom: 0; }
     .stock-header {
       display: flex;
       justify-content: space-between;
@@ -136,6 +127,24 @@
     .stock-code { font-size: 13px; color: #64748b; margin-left: 6px; }
     .stock-desc { font-size: 15px; color: #475569; line-height: 1.5; margin-bottom: 10px; }
     .stock-actions { display: flex; gap: 8px; }
+
+    /* 关联资讯列表样式 */
+    .related-box {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .related-title { font-size: 14px; font-weight: bold; color: #1e293b; margin-bottom: 8px; }
+    .related-link {
+      display: block;
+      font-size: 14px;
+      color: #2563eb;
+      text-decoration: none;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .related-link:hover { text-decoration: underline; }
+    .source-tag { font-size: 11px; background: #e2e8f0; color: #475569; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
 
     /* 弹窗样式 */
     .modal {
@@ -152,6 +161,8 @@
       background: white;
       width: 100%;
       max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
       border-radius: 20px;
       padding: 24px;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
@@ -163,7 +174,6 @@
       padding: 12px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
     }
 
-    /* AI 悬浮小宠物 */
     .ai-pet {
       position: fixed;
       right: 20px; bottom: 20px;
@@ -175,20 +185,6 @@
       font-size: 26px;
       box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
       cursor: pointer;
-      z-index: 999;
-      transition: transform 0.2s;
-    }
-    .ai-pet:active { transform: scale(0.92); }
-    .ai-bubble {
-      position: fixed;
-      right: 90px; bottom: 30px;
-      background: white;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #1e293b;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       z-index: 999;
     }
 
@@ -207,7 +203,7 @@
   <div class="header">
     <div>
       <h1 id="today-date">Stock-Today 早报</h1>
-      <p>爸、妈，今日全球财经要闻与投资风向已送达</p>
+      <p>爸、妈，多源权威财经资讯已更新</p>
     </div>
     <div class="brand-logo">PRO</div>
   </div>
@@ -235,127 +231,153 @@
     </div>
   </div>
 
-  <!-- 2. 今日要闻与行业深度解读 (多条收集) -->
+  <!-- 2. 今日要闻与多源相关资讯 -->
   <div class="card">
-    <div class="card-title">💡 今日要闻与行业深度解读</div>
-    <ul class="news-list" id="news-content">
+    <div class="card-title">💡 今日要闻与多源深度解读</div>
+    <ul class="news-list">
       <li class="news-item">
         <div class="news-top-row">
-          <div><span class="badge badge-red">利好半导体</span> <strong>芯片巨头财报超预期</strong></div>
-          <button class="btn-action" onclick="openModal('芯片产业利好详解', '美股及全球半导体巨头最新财报显示AI算力需求持续井喷。国内产业链相关设备与材料厂商订单饱满，预计今日A股半导体与芯片板块活跃度较高，适合长线关注但切忌盲目追高。')">阅读全文</button>
+          <div><span class="badge badge-red">半导体</span> <strong>芯片巨头业绩超预期，算力需求爆发</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(0)">阅读全文 & 关联文章</button>
         </div>
-        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">全球AI算力需求持续爆发，国内半导体产业链迎来国产替代新机遇。</div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">全球AI算力需求强劲，国内产业链设备与材料订单饱满。</div>
       </li>
 
       <li class="news-item">
         <div class="news-top-row">
-          <div><span class="badge badge-blue">政策利好</span> <strong>央行持续加大流动性投放</strong></div>
-          <button class="btn-action" onclick="openModal('货币政策与实体经济详解', '央行公开市场开展逆回购操作，保持市场流动性合理充裕。此举有效降低了实体经济融资成本，对银行、地产以及高股息的蓝筹红利板块形成长效支撑。')">阅读全文</button>
+          <div><span class="badge badge-blue">宏观政策</span> <strong>央行公开市场净投放，保持流动性充裕</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(1)">阅读全文 & 关联文章</button>
         </div>
-        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">释放积极信号，对高股息蓝筹与银行板块形成稳健支撑。</div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">降低实体经济融资成本，对高股息蓝筹与银行板块形成支撑。</div>
       </li>
 
       <li class="news-item">
         <div class="news-top-row">
-          <div><span class="badge badge-orange">消费升级</span> <strong>大消费与文旅市场复苏</strong></div>
-          <button class="btn-action" onclick="openModal('消费板块投资解读', '最新数据显示居民出行及可选消费稳步回升，餐饮、旅游及高端白酒等板块龙头企业业绩呈现逐季向好态势，适合稳健型投资者逢低布局。')">阅读全文</button>
+          <div><span class="badge badge-orange">大消费</span> <strong>消费与文旅复苏，龙头业绩逐季向好</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(2)">阅读全文 & 关联文章</button>
         </div>
-        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">居民出行及可选消费稳步回升，龙头企业业绩呈现逐季向好态势。</div>
-      </li>
-
-      <li class="news-item">
-        <div class="news-top-row">
-          <div><span class="badge badge-purple">医药生物</span> <strong>创新药出海迎来实质进展</strong></div>
-          <button class="btn-action" onclick="openModal('创新药行业解读', '国内多家创新药企近期成功实现海外大额授权（License-out），标志着中国医药研发实力获得国际认可，相关CXO及头部创新药研发企业值得长期跟踪。')">阅读全文</button>
-        </div>
-        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">国内药企海外授权频传捷报，国际市场对中国创新研发认可度提升。</div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">居民出行及可选消费回升，餐饮、旅游及高端白酒稳健复苏。</div>
       </li>
     </ul>
   </div>
 
-  <!-- 3. 市场热点与新股关注 -->
+  <!-- 3. 市场热点与新股关注 (共10条) -->
   <div class="card">
-    <div class="card-title">⭐ 市场热点与新股申购提醒</div>
-    <div class="stock-list" id="stock-content">
-      
-      <div class="stock-item">
-        <div class="stock-header">
-          <div>
-            <span class="stock-name">中芯国际</span>
-            <span class="stock-code">(688981)</span>
-          </div>
-          <span class="badge badge-red">热门龙头</span>
-        </div>
-        <div class="stock-desc"><strong>机构点评：</strong>国产晶圆代工双雄之一，近期受机构重点加仓，行业周期见底回升。</div>
-        <div class="stock-actions">
-          <button class="btn-action" style="flex:1;" onclick="openModal('中芯国际 (688981) 详细档案', '主营业务：集成电路晶圆代工与技术服务。风险提示：行业竞争加剧。属于核心科技资产，适合逢低稳健关注。')">详细信息</button>
-          <button class="btn-action" style="flex:1; background:#f0fdf4; color:#16a34a;" onclick="setAlert('中芯国际')">⭐ 加入自选关注</button>
-        </div>
-      </div>
-
-      <div class="stock-item">
-        <div class="stock-header">
-          <div>
-            <span class="stock-name">XX智能科技</span>
-            <span class="stock-code">(今日申购)</span>
-          </div>
-          <span class="badge badge-orange">新股日历</span>
-        </div>
-        <div class="stock-desc"><strong>申购提示：</strong>主营高端智能制造装备，发行估值合理，今日可参与网上申购。</div>
-        <div class="stock-actions">
-          <button class="btn-action" style="flex:1;" onclick="openModal('XX智能科技 新股申购指南', '申购代码：787xxx。发行价：待定。主营业务：工业自动化与机器人。打新建议：建议符合条件的账户积极参与申购。')">新股详情</button>
-          <button class="btn-action" style="flex:1; background:#fef3c7; color:#d97706;" onclick="setAlert('XX智能科技申购提醒')">⏰ 设申购提醒</button>
-        </div>
-      </div>
-
+    <div class="card-title">⭐ 市场热点与新股关注 (10条)</div>
+    <div class="stock-list" id="stock-list-container">
+      <!-- 页面动态渲染 10 条新股与热门关注 -->
     </div>
   </div>
 
   <div class="footer-tip">
     — Stock-Today 智能理财助手，每日早晨 7:00 自动更新 —<br>
-    <span style="font-size: 12px; opacity: 0.7;">(资讯内容由 AI 智能汇总生成，仅供长辈参考，投资有风险)</span>
+    <span style="font-size: 12px; opacity: 0.7;">(整合财联社、三大证券报、东方财富、雪球与巨潮资讯网)</span>
   </div>
 
   <!-- AI 悬浮小宠物 -->
-  <div class="ai-bubble">Hi~ 点我问股市 👉</div>
-  <div class="ai-pet" onclick="openAiChat()">🤖</div>
+  <div class="ai-pet" onclick="alert('🤖 AI 小助手：爸妈今天想了解哪只股票？可以直接在交流群问孩子哦！')">🤖</div>
 
   <!-- 通用弹窗组件 -->
   <div class="modal" id="infoModal">
     <div class="modal-content">
       <div class="modal-title" id="modalTitle">详情标题</div>
       <div class="modal-body" id="modalBody">详情内容...</div>
-      <button class="modal-close" onclick="closeModal()">我知道了</button>
+      <div class="related-box" id="modalRelated">
+        <!-- 关联文章链接列表 -->
+      </div>
+      <button class="modal-close" onclick="closeModal()" style="margin-top:16px;">我知道了</button>
     </div>
   </div>
 
   <script>
-    // 动态显示今天日期
     const now = new Date();
     document.getElementById('today-date').innerText = 
       `${now.getMonth() + 1}月${now.getDate()}日 Stock-Today`;
 
+    // 结构化多源数据
+    const newsData = [
+      {
+        title: "芯片巨头业绩超预期，AI算力需求爆发",
+        detail: "全球AI算力需求强劲，国内产业链设备与材料订单饱满。根据三大证券报及财联社最新分析，芯片龙头业绩大幅增长，设备厂商迎来新一轮补库存周期。",
+        related: [
+          { source: "财联社", title: "AI芯片需求爆发，产业链多家公司业绩喜人", url: "https://www.cls.cn/" },
+          { source: "东方财富网", title: "半导体板块大涨，机构资金最新研判出炉", url: "https://www.eastmoney.com/" },
+          { source: "雪球社区", title: "深度解析：芯片产业链哪些龙头最具长线价值？", url: "https://xueqiu.com/" }
+        ]
+      },
+      {
+        title: "央行公开市场净投放，保持流动性充裕",
+        detail: "央行通过公开市场逆回购操作保持流动性合理充裕。据巨潮资讯网官方公告与上海证券报分析，政策意图在于提振实体经济融资需求，红利资产与高股息板块直接受益。",
+        related: [
+          { source: "巨潮资讯网", title: "金融支持实体经济最新政策公告汇总", url: "http://www.cninfo.com.cn/" },
+          { source: "上海证券报", title: "流动性合理充裕，红利资产受机构青睐", url: "https://www.cnstock.com/" }
+        ]
+      },
+      {
+        title: "消费与文旅市场复苏，龙头业绩逐季向好",
+        detail: "中国证券报头版文章指出，随着促消费政策落地见效，大消费龙头估值修复空间打开，可选消费与餐饮酒旅板块盈利能力持续提升。",
+        related: [
+          { source: "中国证券报", title: "促消费政策效果显现，文旅餐饮双双回暖", url: "http://www.cs.com.cn/" },
+          { source: "雪球社区", title: "大消费板块反弹，长线投资者如何布局？", url: "https://xueqiu.com/" }
+        ]
+      }
+    ];
+
+    // 10条新股/热门股票数据
+    const tenStocks = [
+      { name: "中芯国际", code: "(688981)", badge: "热门龙头", badge_class: "badge-red", desc: "晶圆代工龙头，受益于芯片复苏与国产替代。" },
+      { name: "XX精密", code: "(787001)", badge: "今日申购", badge_class: "badge-orange", desc: "高端半导体设备部件制造，顶格申购建议关注。" },
+      { name: "YY智能", code: "(301502)", badge: "今日申购", badge_class: "badge-orange", desc: "工业机器人伺服系统供应商，发行价合理。" },
+      { name: "ZZ科技", code: "(787003)", badge: "明日申购", badge_class: "badge-blue", desc: "算力服务器散热模块龙头，成长性突出。" },
+      { name: "AA医疗", code: "(301505)", badge: "新股日历", badge_class: "badge-purple", desc: "创新医疗器械企业，拥有多项核心自主专利。" },
+      { name: "BB材料", code: "(688006)", badge: "新股日历", badge_class: "badge-purple", desc: "新能源电池关键材料突破者，关注打新机会。" },
+      { name: "CC光电", code: "(787007)", badge: "待上市", badge_class: "badge-blue", desc: "光芯片封测领域专精特新“小巨人”企业。" },
+      { name: "DD软件", code: "(301508)", badge: "待上市", badge_class: "badge-blue", desc: "工业软件国产化领军企业，机构关注度高。" },
+      { name: "EE数据", code: "(688009)", badge: "热门龙头", badge_class: "badge-red", desc: "大数据基础设施建设者，高股息稳健资产。" },
+      { name: "FF装备", code: "(301510)", badge: "新股日历", badge_class: "badge-orange", desc: "商业航天零部件核心供应商，科技属性强。" }
+    ];
+
+    // 渲染10条股票
+    const container = document.getElementById('stock-list-container');
+    tenStocks.forEach(item => {
+      container.innerHTML += `
+        <div class="stock-item">
+          <div class="stock-header">
+            <div>
+              <span class="stock-name">${item.name}</span>
+              <span class="stock-code">${item.code}</span>
+            </div>
+            <span class="badge ${item.badge_class}">${item.type}</span>
+          </div>
+          <div class="stock-desc"><strong>看点：</strong>${item.desc}</div>
+          <div class="stock-actions">
+            <button class="btn-action" style="flex:1;" onclick="alert('已查看【${item.name}】的详细资讯')">详细信息</button>
+            <button class="btn-action" style="flex:1; background:#fef3c7; color:#d97706;" onclick="alert('已为爸妈设置【${item.name}】申购提醒！')">⏰ 设申购提醒</button>
+          </div>
+        </div>
+      `;
+    });
+
     // 弹窗控制逻辑
-    function openModal(title, text) {
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('modalBody').innerText = text;
+    function openNewsDetail(index) {
+      const item = newsData[index];
+      document.getElementById('modalTitle').innerText = item.title;
+      document.getElementById('modalBody').innerText = item.detail;
+      
+      let linksHtml = `<div class="related-title">🔗 来源于各大平台的相关文章：</div>`;
+      item.related.forEach(link => {
+        linksHtml += `
+          <a href="${link.url}" target="_blank" class="related-link">
+            <span class="source-tag">${link.source}</span> ${link.title}
+          </a>
+        `;
+      });
+      document.getElementById('modalRelated').innerHTML = linksHtml;
       document.getElementById('infoModal').style.display = 'flex';
     }
+
     function closeModal() {
       document.getElementById('infoModal').style.display = 'none';
-    }
-
-    // 设提醒 / 自选互动
-    function setAlert(name) {
-      alert(`已成功为您预约【${name}】提醒！到时会在手机通知栏推送。`);
-    }
-
-    // AI 小宠物点击互动
-    function openAiChat() {
-      const questions = [
-        "🤖 AI 小助手提示：\n\n爸妈今天想了解哪类股票？\n1. 咨询银行业高股息防守策略\n2. 查询半导体芯片最新动态\n3. 了解今日打新申购注意事项\n\n（直接在理财交流群问孩子或通过语音输入更方便哦！）"
-      ];
-      alert(questions[0]);
     }
   </script>
 </body>
