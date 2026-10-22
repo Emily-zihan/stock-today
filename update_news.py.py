@@ -1,0 +1,73 @@
+import os
+import requests
+
+# 1. 简易财经新闻获取（以公开免费接口或模拟数据为例，后期可对接 AkShare/Tushare）
+def fetch_financial_news():
+    # 这里可以对接专业的财经 API，先以简报逻辑为例
+    return [
+        "美股三大指数昨夜集体收涨，科技股领涨，纳指涨幅超1%。",
+        "央行今日公开市场开展逆回购操作，保证市场流动性充裕。",
+        "最新离岸人民币汇率保持稳定，大宗商品价格小幅震荡。"
+    ]
+
+# 2. 调用 AI 大模型生成“大白话早报”
+def generate_summary(news_list):
+    api_key = os.environ.get("DEEPSEEK_API_KEY")
+    if not api_key:
+        print("未检测到 API Key，使用默认示例数据")
+        return """
+        <li class="news-item"><span class="tag-up">利好科技</span> 美股芯片股大涨，AI概念保持强势，预计今日A股半导体表现活跃。</li>
+        <li class="news-item"><span class="tag-up">政策利好</span> 央行持续释放流动性，加大对实体经济支持，利好金融与基建。</li>
+        <li class="news-item"><span class="tag-up">市场稳定</span> 汇率与大宗商品走势平稳，整体宏观经济环境偏温暖。</li>
+        """
+
+    prompt = f"""
+    你是一个贴心的老年理财助手。请将以下财经新闻转化为适合老人家阅读的大白话早报。
+    格式必须是 3条 HTML <li> 列表标签，每一条包含一个观点标签（如 <span class="tag-up">利好XX</span>）：
+    新闻列表：{news_list}
+    """
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "deepseek-chat",
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.7
+    }
+
+    try:
+        res = requests.post("https://api.deepseek.com/v1/chat/completions", json=data, headers=headers)
+        result = res.json()
+        return result['choices'][0]['message']['content']
+    except Exception as e:
+        print("AI 生成失败:", e)
+        return ""
+
+# 3. 替换 index.html 里的内容
+def update_html(ai_summary):
+    if not ai_summary:
+        return
+    
+    with open("index.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    # 替换新闻列表部分
+    import re
+    new_html = re.sub(
+        r'<ul class="news-list" id="news-content">.*?</ul>',
+        f'<ul class="news-list" id="news-content">\n{ai_summary}\n    </ul>',
+        html_content,
+        flags=re.DOTALL
+    )
+
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(new_html)
+    print("index.html 更新成功！")
+
+if __name__ == "__main__":
+    raw_news = fetch_financial_news()
+    summary = generate_summary(raw_news)
+    update_html(summary)
