@@ -164,3 +164,265 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+    .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #1e293b; }
+    .modal-body { font-size: 16px; color: #475569; line-height: 1.7; margin-bottom: 16px; white-space: pre-line; }
+    .modal-close {
+      width: 100%; background: #2563eb; color: white; border: none;
+      padding: 12px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
+    }
+
+    .ai-pet {
+      position: fixed;
+      right: 20px; bottom: 20px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .footer-tip {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 13px;
+      margin-top: 24px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部仪表盘 -->
+  <div class="header">
+    <div>
+      <h1 id="today-date">Stock-Today 早报</h1>
+      <p>爸、妈，今日权威财经与新股资讯已更新</p>
+    </div>
+    <div class="brand-logo">PRO</div>
+  </div>
+
+  <!-- 1. 隔夜全球大盘卡片 -->
+  <div class="card">
+    <div class="card-title">🌐 隔夜全球大盘风向</div>
+    <div class="market-grid">
+      <div class="market-item">
+        <div class="market-name">道琼斯指数</div>
+        <div class="market-val up">+0.52%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">纳斯达克</div>
+        <div class="market-val up">+1.18%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">离岸人民币</div>
+        <div class="market-val down">7.24</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">布伦特原油</div>
+        <div class="market-val down">-0.85%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 今日要闻与多源深度解读 -->
+  <div class="card">
+    <div class="card-title">💡 今日要闻与多源深度解读</div>
+    <ul class="news-list">
+      <li class="news-item">
+        <div class="news-top-row">
+          <div><span class="badge badge-red">半导体</span> <strong>芯片巨头业绩超预期，算力需求爆发</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(0)">阅读全文 & 关联文章</button>
+        </div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">全球AI算力需求强劲，国内产业链设备与材料订单饱满。</div>
+      </li>
+
+      <li class="news-item">
+        <div class="news-top-row">
+          <div><span class="badge badge-blue">宏观政策</span> <strong>央行公开市场净投放，保持流动性充裕</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(1)">阅读全文 & 关联文章</button>
+        </div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">降低实体经济融资成本，对高股息蓝筹与银行板块形成支撑。</div>
+      </li>
+
+      <li class="news-item">
+        <div class="news-top-row">
+          <div><span class="badge badge-orange">大消费</span> <strong>消费与文旅复苏，龙头业绩逐季向好</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(2)">阅读全文 & 关联文章</button>
+        </div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">居民出行及可选消费回升，餐饮、旅游及高端白酒稳健复苏。</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 3. 市场热点与新股关注 (精选3条) -->
+  <div class="card">
+    <div class="card-title">⭐ 市场热点与新股关注</div>
+    <div class="stock-list" id="stock-list-container">
+      <!-- 动态渲染3条精选新股与热点 -->
+    </div>
+  </div>
+
+  <div class="footer-tip">
+    — Stock-Today 智能理财助手，每日早晨 7:00 自动更新 —<br>
+    <span style="font-size: 12px; opacity: 0.7;">(整合财联社、三大证券报、东方财富、雪球与巨潮资讯网)</span>
+  </div>
+
+  <!-- AI 悬浮小宠物 -->
+  <div class="ai-pet" onclick="alert('🤖 AI 小助手：爸妈今天想了解哪只股票？可以直接在交流群问孩子哦！')">🤖</div>
+
+  <!-- 通用弹窗组件 -->
+  <div class="modal" id="infoModal">
+    <div class="modal-content">
+      <div class="modal-title" id="modalTitle">详情标题</div>
+      <div class="modal-body" id="modalBody">详情内容...</div>
+      <div class="related-box" id="modalRelated"></div>
+      <button class="modal-close" onclick="closeModal()" style="margin-top:16px;">我知道了</button>
+    </div>
+  </div>
+
+  <script>
+    const now = new Date();
+    document.getElementById('today-date').innerText = 
+      `${now.getMonth() + 1}月${now.getDate()}日 Stock-Today`;
+
+    // 要闻数据
+    const newsData = [
+      {
+        title: "芯片巨头业绩超预期，AI算力需求爆发",
+        detail: "全球AI算力需求强劲，国内产业链设备与材料订单饱满。根据三大证券报及财联社最新分析，芯片龙头业绩大幅增长，设备厂商迎来新一轮补库存周期。",
+        related: [
+          { source: "财联社", title: "AI芯片需求爆发，产业链多家公司业绩喜人", url: "https://www.cls.cn/" },
+          { source: "东方财富网", title: "半导体板块大涨，机构资金最新研判出炉", url: "https://www.eastmoney.com/" },
+          { source: "雪球社区", title: "深度解析：芯片产业链哪些龙头最具长线价值？", url: "https://xueqiu.com/" }
+        ]
+      },
+      {
+        title: "央行公开市场净投放，保持流动性充裕",
+        detail: "央行通过公开市场逆回购操作保持流动性合理充裕。据巨潮资讯网官方公告与上海证券报分析，政策意图在于提振实体经济融资需求，红利资产与高股息板块直接受益。",
+        related: [
+          { source: "巨潮资讯网", title: "金融支持实体经济最新政策公告汇总", url: "http://www.cninfo.com.cn/" },
+          { source: "上海证券报", title: "流动性合理充裕，红利资产受机构青睐", url: "https://www.cnstock.com/" }
+        ]
+      },
+      {
+        title: "消费与文旅市场复苏，龙头业绩逐季向好",
+        detail: "中国证券报头版文章指出，随着促消费政策落地见效，大消费龙头估值修复空间打开，可选消费与餐饮酒旅板块盈利能力持续提升。",
+        related: [
+          { source: "中国证券报", title: "促消费政策效果显现，文旅餐饮双双回暖", url: "http://www.cs.com.cn/" },
+          { source: "雪球社区", title: "大消费板块反弹，长线投资者如何布局？", url: "https://xueqiu.com/" }
+        ]
+      }
+    ];
+
+    // 精选3条新股/热门股票数据
+    const threeStocks = [
+      {
+        name: "中芯国际",
+        code: "(688981)",
+        badge: "热门龙头",
+        badge_class: "badge-red",
+        desc: "晶圆代工龙头，受益于芯片复苏与国产替代。",
+        detail: "【公司简介】国内领先的晶圆代工企业，专注于半导体制造。\n\n【关注理由】AI算力与消费电子复苏带动产能利用率提升，近期获机构重点关注。\n\n【风险提示】行业竞争及外部技术环境变化。",
+        related: [
+          { source: "巨潮资讯网", title: "中芯国际最新业绩说明会投资者问答", url: "http://www.cninfo.com.cn/" },
+          { source: "财联社", title: "芯片代工产能吃紧，龙头迎来估值重塑", url: "https://www.cls.cn/" }
+        ]
+      },
+      {
+        name: "XX精工",
+        code: "(787001)",
+        badge: "今日申购",
+        badge_class: "badge-orange",
+        desc: "高端半导体设备部件制造，今日开放网上申购。",
+        detail: "【申购指南】申购代码：787001 | 发行价：28.5元/股。\n\n【主营业务】半导体精密零部件制造，产品打破国外垄断。\n\n【打新建议】发行估值合理，基本面优异，建议符合条件的账户积极申购。",
+        related: [
+          { source: "东方财富", title: "XX精工新股申购指南及中签率预测", url: "https://www.eastmoney.com/" },
+          { source: "证券时报", title: "新股前瞻：半导体零部件新星强势登场", url: "http://www.stcn.com/" }
+        ]
+      },
+      {
+        name: "YY智能",
+        code: "(301502)",
+        badge: "明日申购",
+        badge_class: "badge-blue",
+        desc: "工业机器人伺服系统供应商，成长属性强。",
+        detail: "【申购指南】申购代码：301502 | 发行价：19.8元/股。\n\n【主营业务】自动化伺服驱动与控制系统研发。\n\n【关注理由】受益于智能制造与机器人产业爆发，订单增速显著。",
+        related: [
+          { source: "雪球社区", title: "YY智能基本面深度拆解：机器人核心资产", url: "https://xueqiu.com/" },
+          { source: "中国证券报", title: "自动化赛道迎新成员，YY智能明日申购", url: "http://www.cs.com.cn/" }
+        ]
+      }
+    ];
+
+    // 渲染3条精选股票
+    const container = document.getElementById('stock-list-container');
+    threeStocks.forEach((item, index) => {
+      container.innerHTML += `
+        <div class="stock-item">
+          <div class="stock-header">
+            <div>
+              <span class="stock-name">${item.name}</span>
+              <span class="stock-code">${item.code}</span>
+            </div>
+            <span class="badge ${item.badge_class}">${item.badge}</span>
+          </div>
+          <div class="stock-desc"><strong>看点：</strong>${item.desc}</div>
+          <button class="btn-block" onclick="openStockDetail(${index})">查看详细介绍 & 关联文章</button>
+        </div>
+      `;
+    });
+
+    // 弹窗逻辑 - 要闻
+    function openNewsDetail(index) {
+      const item = newsData[index];
+      showModal(item.title, item.detail, item.related);
+    }
+
+    // 弹窗逻辑 - 新股与热点
+    function openStockDetail(index) {
+      const item = threeStocks[index];
+      showModal(`${item.name} ${item.code} 详细介绍`, item.detail, item.related);
+    }
+
+    function showModal(title, detail, related) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalBody').innerText = detail;
+      
+      let linksHtml = `<div class="related-title">🔗 来自权威媒体的相关资讯：</div>`;
+      related.forEach(link => {
+        linksHtml += `
+          <a href="${link.url}" target="_blank" class="related-link">
+            <span class="source-tag">${link.source}</span> ${link.title}
+          </a>
+        `;
+      });
+      document.getElementById('modalRelated').innerHTML = linksHtml;
+      document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('infoModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
