@@ -3,166 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>每日理财早报</title>
+  <title>爸妈的每日理财早报</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#d93025">
+  <meta name="theme-color" content="#1e293b">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: #f4f6f9;
-      color: #1a1a1a;
+      background-color: #f1f5f9;
+      color: #0f172a;
       padding: 16px;
       padding-bottom: 40px;
     }
+    
+    /* 1. 顶部高级感问候横幅 */
     .header {
-      background: linear-gradient(135deg, #d93025, #b31412);
+      background: linear-gradient(135deg, #1e293b, #0f172a);
       color: white;
-      padding: 20px 16px;
-      border-radius: 16px;
+      padding: 24px 20px;
+      border-radius: 20px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(217, 48, 37, 0.2);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
     }
-    .header h1 { font-size: 26px; margin-bottom: 6px; font-weight: bold; }
-    .header p { font-size: 16px; opacity: 0.9; }
+    .header h1 { font-size: 28px; margin-bottom: 6px; font-weight: 700; letter-spacing: -0.5px; }
+    .header p { font-size: 16px; opacity: 0.85; }
 
+    /* 通用卡片容器 */
     .card {
       background: white;
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 20px;
+      padding: 20px;
       margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     }
     .card-title {
       font-size: 20px;
-      font-weight: bold;
-      color: #333;
-      border-left: 5px solid #d93025;
-      padding-left: 10px;
-      margin-bottom: 12px;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f1f5f9;
     }
 
-    /* 市场指标大字卡片 */
+    /* 2. 隔夜全球大盘网格 */
     .market-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
     }
     .market-item {
-      background: #f8f9fa;
-      padding: 12px;
-      border-radius: 10px;
+      background: #f8fafc;
+      padding: 14px;
+      border-radius: 14px;
       text-align: center;
+      border: 1px solid #e2e8f0;
     }
-    .market-name { font-size: 16px; color: #666; }
-    .market-val { font-size: 22px; font-weight: bold; margin: 4px 0; }
-    .up { color: #d93025; } /* 涨-红 */
-    .down { color: #188038; } /* 跌-绿 */
+    .market-name { font-size: 15px; color: #64748b; font-weight: 500; }
+    .market-val { font-size: 24px; font-weight: 800; margin: 6px 0 2px 0; }
+    
+    /* A股红涨绿跌 */
+    .up { color: #ef4444; } 
+    .down { color: #22c55e; }
 
-    /* 智能解读文本 */
+    /* 3. 新闻解读列表 */
     .news-list { list-style: none; }
     .news-item {
-      font-size: 19px;
-      line-height: 1.6;
-      margin-bottom: 14px;
-      padding-bottom: 12px;
-      border-bottom: 1px dashed #eee;
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed #e2e8f0;
+      color: #334155;
     }
-    .news-item:last-child { border-bottom: none; margin-bottom: 0; }
-    .tag-up { background: #fce8e6; color: #d93025; padding: 2px 8px; border-radius: 4px; font-size: 15px; font-weight: bold; }
-
-    /* 语音播报按钮 */
-    .audio-btn {
-      width: 100%;
-      background: #07c160;
-      color: white;
-      border: none;
+    .news-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    
+    /* 4. 股票/新股关注列表 */
+    .stock-list { list-style: none; }
+    .stock-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
       padding: 14px;
-      font-size: 20px;
-      font-weight: bold;
-      border-radius: 12px;
-      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .stock-item:last-child { margin-bottom: 0; }
+    .stock-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
+      margin-bottom: 8px;
     }
-  </style>
-</head>
-<body>
-
-  <!-- 头部时间 -->
-  <div class="header">
-    <h1 id="today-date">每日理财早报</h1>
-    <p>爸、妈，看这里搞懂今日全球经济与股市变化</p>
-  </div>
-
-  <!-- 语音朗读按钮 -->
-  <button class="audio-btn" onclick="speakNews()">
-    🔊 点击大声朗读今日早报
-  </button>
-
-  <div style="height: 16px;"></div>
-
-  <!-- 隔夜全球股市 -->
-  <div class="card">
-    <div class="card-title">隔夜全球大盘</div>
-    <div class="market-grid">
-      <div class="market-item">
-        <div class="market-name">道琼斯指数</div>
-        <div class="market-val up">+0.52%</div>
-      </div>
-      <div class="market-item">
-        <div class="market-name">纳斯达克</div>
-        <div class="market-val up">+1.18%</div>
-      </div>
-      <div class="market-item">
-        <div class="market-name">离岸人民币</div>
-        <div class="market-val down">7.24</div>
-      </div>
-      <div class="market-item">
-        <div class="market-name">布伦特原油</div>
-        <div class="market-val down">-0.85%</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- AI 大白话解读 -->
-  <div class="card">
-    <div class="card-title">今日核心要闻与行业解读</div>
-    <ul class="news-list" id="news-content">
-      <li class="news-item">
-        <span class="tag-up">利好科技</span> 美股芯片股昨夜大涨，AI 相关板块保持强势，预计今日 A 股半导体概念走势较强。
-      </li>
-      <li class="news-item">
-        <span class="tag-up">政策利好</span> 央行今日继续释放流动性，加大对实体经济支持力度，利好银行与基建板块。
-      </li>
-      <li class="news-item">
-        <span class="tag-up">消费提示</span> 离岸人民币汇率保持稳定，大宗商品价格略微回落，整体宏观环境偏暖。
-      </li>
-    </ul>
-  </div>
-
-  <script>
-    // 显示今天日期
-    const now = new Date();
-    document.getElementById('today-date').innerText = 
-      `${now.getMonth() + 1}月${now.getDate()}日 理财早报`;
-
-    // 朗读功能
-    function speakNews() {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const text = document.getElementById('news-content').innerText;
-        const msg = new SpeechSynthesisUtterance("爸妈，今天理财早报如下：" + text);
-        msg.rate = 0.9; // 稍微放慢语速
-        msg.lang = 'zh-CN';
-        window.speechSynthesis.speak(msg);
-      } else {
-        alert('您的手机不支持语音朗读');
-      }
-    }
-  </script>
-</body>
-</html>
+    .stock-name { font-size: 19px; font-weight: bold; color: #0f172a; }
+    .stock-code { font-size: 14px; color: #64748b; font-weight: normal; margin-left: 6px; }
+    .stock-desc { font-size: 16px; color: #4755
