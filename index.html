@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>stock-today</title>
+  <title>Stock-today</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e293b">
   <style>
@@ -98,4 +98,121 @@
     }
     .stock-name { font-size: 19px; font-weight: bold; color: #0f172a; }
     .stock-code { font-size: 14px; color: #64748b; font-weight: normal; margin-left: 6px; }
-    .stock-desc { font-size: 16px; color: #4755
+    .stock-desc { font-size: 16px; color: #475569; line-height: 1.5; }
+
+    /* 标签样式 */
+    .badge {
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-block;
+    }
+    .badge-red { background: #fee2e2; color: #dc2626; }
+    .badge-blue { background: #e0f2fe; color: #0284c7; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+
+    /* 底部提示 */
+    .footer-tip {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 13px;
+      margin-top: 24px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 板块 1：顶部问候与日期 -->
+  <div class="header">
+    <h1 id="today-date">每日理财早报</h1>
+    <p>爸、妈，祝您今天心情愉快，投资平稳！</p>
+  </div>
+
+  <!-- 板块 2：隔夜全球大盘卡片 -->
+  <div class="card">
+    <div class="card-title">🌐 隔夜全球大盘风向</div>
+    <div class="market-grid">
+      <div class="market-item">
+        <div class="market-name">道琼斯指数</div>
+        <div class="market-val up">+0.52%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">纳斯达克</div>
+        <div class="market-val up">+1.18%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">离岸人民币</div>
+        <div class="market-val down">7.24</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">布伦特原油</div>
+        <div class="market-val down">-0.85%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块 3：AI 大白话早报卡片 -->
+  <div class="card">
+    <div class="card-title">💡 今日要闻与行业解读</div>
+    <ul class="news-list" id="news-content">
+      <li class="news-item">
+        <span class="badge badge-red">利好科技</span> 美股芯片巨头大涨，AI技术应用加速落地，预计今日A股半导体与算力概念走势较强。
+      </li>
+      <li class="news-item">
+        <span class="badge badge-blue">政策支持</span> 央行持续投放流动性，支持消费与实体经济发展，对高股息蓝筹与消费板块形成支撑。
+      </li>
+      <li class="news-item">
+        <span class="badge badge-orange">市场风向</span> 国际油价回调，避险情绪有所缓和，整体市场环境偏向稳健。
+      </li>
+    </ul>
+  </div>
+
+  <!-- 板块 4：重点关注与新股/潜力动态 -->
+  <div class="card">
+    <div class="card-title">⭐ 市场热点与新股关注</div>
+    <div class="stock-list" id="stock-content">
+      
+      <div class="stock-item">
+        <div class="stock-header">
+          <div>
+            <span class="stock-name">中芯国际</span>
+            <span class="stock-code">(688981)</span>
+          </div>
+          <span class="badge badge-red">热门龙头</span>
+        </div>
+        <div class="stock-desc">
+          <strong>关注理由：</strong>受益于国产替代加速与芯片行业复苏，近期机构关注度较高。
+        </div>
+      </div>
+
+      <div class="stock-item">
+        <div class="stock-header">
+          <div>
+            <span class="stock-name">XX科技</span>
+            <span class="stock-code">(今日申购)</span>
+          </div>
+          <span class="badge badge-orange">新股日历</span>
+        </div>
+        <div class="stock-desc">
+          <strong>申购提示：</strong>今日A股新股申购，主营智能制造领域，建议关注打新机会。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer-tip">
+    — 专属智能理财助手，每日 7:00 自动更新 —<br>
+    <span style="font-size: 12px; opacity: 0.8;">(注：以上信息由 AI 汇总生成，仅供资讯参考，不构成投资建议)</span>
+  </div>
+
+  <script>
+    // 动态显示今天日期
+    const now = new Date();
+    document.getElementById('today-date').innerText = 
+      `${now.getMonth() + 1}月${now.getDate()}日 理财早报`;
+  </script>
+</body>
+</html>
