@@ -1,4 +1,22 @@
 import os
+from openai import OpenAI  # DeepSeek 兼容 OpenAI SDK
+
+# 从 GitHub Secrets 中安全读取秘钥
+client = OpenAI(
+    api_key=os.environ.get("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com"
+)
+
+response = client.chat.completions.create(
+    model="deepseek-chat",
+    messages=[
+        {"role": "system", "content": "你是一个专业的财经早报助手。"},
+        {"role": "user", "content": "请帮我总结今日的宏观财经资讯。"},
+    ],
+    stream=False
+)
+
+print(response.choices[0].message.content)
 import requests
 
 # 1. 模拟/对接多源财经资讯（财联社、东方财富、雪球、巨潮资讯等）
