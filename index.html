@@ -50,6 +50,31 @@
       border-bottom: 2px solid #f1f5f9;
     }
 
+    /* 一句话观盘指南卡片样式 */
+    .summary-card {
+      background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+      border: 1px solid #bae6fd;
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px -2px rgba(14, 165, 233, 0.1);
+    }
+    .summary-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #0369a1;
+      margin-bottom: 8px;
+    }
+    .summary-content {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.6;
+    }
+
     .market-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -125,7 +150,6 @@
     }
     .stock-name { font-size: 19px; font-weight: bold; color: #0f172a; }
     
-    /* 强化的可点击复制股票代码样式 */
     .stock-code-btn {
       font-size: 13px;
       color: #2563eb;
@@ -204,7 +228,6 @@
       padding: 12px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
     }
 
-    /* 复制成功后的浮动 Toast 气泡 */
     .toast-tip {
       position: fixed;
       top: 20px; left: 50%;
@@ -220,14 +243,12 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    /* 萌娃悬浮呼吸动画定义 */
     @keyframes petFloat {
       0% { transform: translateY(0px) scale(1); }
       50% { transform: translateY(-8px) scale(1.03); }
       100% { transform: translateY(0px) scale(1); }
     }
 
-    /* 每日自动换造型的 AI 萌娃小宠物样式（已绑定呼吸动画） */
     .ai-pet {
       position: fixed;
       right: 16px; bottom: 20px;
@@ -241,7 +262,7 @@
       overflow: hidden;
       display: flex; align-items: center; justify-content: center;
       transition: transform 0.2s;
-      animation: petFloat 3s ease-in-out infinite; /* 3秒一个周期，无限呼吸浮动 */
+      animation: petFloat 3s ease-in-out infinite;
     }
     .ai-pet:active { transform: scale(0.92); }
     .ai-pet img {
@@ -292,6 +313,16 @@
         <div class="market-name">布伦特原油</div>
         <div class="market-val down">-0.85%</div>
       </div>
+    </div>
+  </div>
+
+  <!-- 新增：“一句话观盘指南”卡片 -->
+  <div class="summary-card">
+    <div class="summary-header">
+      <span>💡</span> DeepSeek AI 今日观盘指南
+    </div>
+    <div class="summary-content" id="today-summary">
+      外盘普涨利好开盘，半导体与大消费板块活跃，建议保持理性，多看少动。
     </div>
   </div>
 
@@ -423,7 +454,6 @@
       }
     ];
 
-    // 渲染股票列表，整合一键复制代码按钮
     const container = document.getElementById('stock-list-container');
     threeStocks.forEach((item, index) => {
       container.innerHTML += `
@@ -443,12 +473,10 @@
       `;
     });
 
-    // 复制代码的通用函数
     function copyStockCode(code) {
       navigator.clipboard.writeText(code).then(() => {
         showToast(`📋 代码 ${code} 已复制`);
       }).catch(err => {
-        // 兼容备用复制方案
         const input = document.createElement('input');
         input.value = code;
         document.body.appendChild(input);
@@ -459,7 +487,6 @@
       });
     }
 
-    // 显示 Toast 气泡提示
     function showToast(text) {
       const toast = document.getElementById('toast');
       toast.innerText = text;
@@ -499,7 +526,6 @@
       document.getElementById('infoModal').style.display = 'none';
     }
 
-    // 对应周一至周日的萌娃数据配置
     const dailyPetConfig = {
       1: {
         avatar: "p1.jpg",
@@ -538,14 +564,11 @@
       }
     };
 
-    // 根据当前星期自动切换萌娃头像
-    const currentDay = new Date().getDay(); // 获取当前是星期几 (0-6)
+    const currentDay = new Date().getDay();
     const todayPet = dailyPetConfig[currentDay] || dailyPetConfig[1];
 
-    // 页面加载时自动设置右下角头像图片
     document.getElementById('pet-avatar').src = todayPet.avatar;
 
-    // 点击 AI 萌娃小宠物的互动弹窗
     function openAiPetChat() {
       showModal(
         todayPet.greeting, 
