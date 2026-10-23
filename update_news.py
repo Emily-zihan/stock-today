@@ -1,23 +1,38 @@
 import os
+import re
+import requests
 from openai import OpenAI  # DeepSeek 兼容 OpenAI SDK
 
 # 从 GitHub Secrets 中安全读取秘钥
-client = OpenAI(
-    api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    base_url="https://api.deepseek.com"
-)
+api_key = os.environ.get("DEEPSEEK_API_KEY")
+client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com") if api_key else None
 
-response = client.chat.completions.create(
-    model="deepseek-chat",
-    messages=[
-        {"role": "system", "content": "你是一个专业的财经早报助手。"},
-        {"role": "user", "content": "请帮我总结今日的宏观财经资讯。"},
-    ],
-    stream=False
-)
+def generate_market_summary(news_text=""):
+    """使用 DeepSeek API 生成 30 字以内的观盘指南"""
+    if not client:
+        return "外盘普涨利好开盘，半导体与大消费板块活跃，建议保持理性，多看少动。"
+    
+    prompt = f"""你是一个贴心的理财助手，请根据以下今日财经要闻，用极精炼的口吻为爸妈写一句“今日观盘指南”。
+要求：
+1. 字数严格限制在 30 字以内。
+2. 语言通俗易懂、积极稳健。
+3. 格式直接输出内容，不要带引号或前缀。
 
-print(response.choices[0].message.content)
-import requests
+今日要闻：
+{news_text}
+"""
+    try:
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=60
+        )
+        summary = response.choices[0].message.content.strip()
+        return summary
+    except Exception as e:
+        print("DeepSeek API 调用失败，使用默认观盘指南：", e)
+        return "外盘普涨利好开盘，半导体与大消费板块活跃，建议保持理性，多看少动。"
 
 # 1. 模拟/对接多源财经资讯（财联社、东方财富、雪球、巨潮资讯等）
 def fetch_multi_source_news():
@@ -58,7 +73,7 @@ def fetch_multi_source_news():
         }
     ]
 
-# 2. 获取10条热门股票/新股日历数据
+# 2. 获取热门股票/新股日历数据
 def fetch_ten_stocks():
     return [
         {"name": "中芯国际", "code": "688981", "type": "热门龙头", "badge_class": "badge-red", "desc": "晶圆代工龙头，受益于芯片复苏与国产替代。"},
@@ -73,5 +88,29 @@ def fetch_ten_stocks():
         {"name": "FF装备", "code": "301510", "type": "新股日历", "badge_class": "badge-orange", "desc": "商业航天零部件核心供应商，科技属性强。"}
     ]
 
+def update_index_html():
+    # 提取新闻内容并让 DeepSeek 生成观盘指南
+    news_list = fetch_multi_source_news()
+    news_combined_text = "; ".join([n["title"] for n in news_list])
+    
+    summary_text = generate_market_summary(news_combined_text)
+    
+    if os.path.exists("index.html"):
+        with open("index.html", "r", encoding="utf-8") as f:
+            html_content = f.read()
+
+        # 动态替换网页中的 today-summary 文本
+        pattern = r'(<div class="summary-content" id="today-summary">\s*).*?(\s*</div>)'
+        new_html = re.sub(pattern, f'\\1{summary_text}\\2', html_content, flags=re.DOTALL)
+
+        with open("index.html", "w", encoding="utf-8") as f:
+            f.write(new_html)
+        
+        print(f"成功更新 index.html，AI观盘指南为：{summary_text}")
+    else:
+        print("未找到 index.html 文件")
+
 if __name__ == "__main__":
-    print("已成功配置多源资讯与10条新股数据接口！")
+    print("开始运行每日财经数据与 AI 观盘指南更新...")
+    update_index_html()
+    print("更新脚本执行完毕！")
