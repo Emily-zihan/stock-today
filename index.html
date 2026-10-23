@@ -124,7 +124,27 @@
       margin-bottom: 8px;
     }
     .stock-name { font-size: 19px; font-weight: bold; color: #0f172a; }
-    .stock-code { font-size: 14px; color: #64748b; margin-left: 6px; }
+    
+    /* 强化的可点击复制股票代码样式 */
+    .stock-code-btn {
+      font-size: 13px;
+      color: #2563eb;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-left: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .stock-code-btn:active {
+      background: #dbeafe;
+    }
+
     .stock-desc { font-size: 15px; color: #475569; line-height: 1.5; margin-bottom: 12px; }
     
     .btn-block {
@@ -184,7 +204,30 @@
       padding: 12px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
     }
 
-    /* 每日自动换造型的 AI 萌娃小宠物样式 */
+    /* 复制成功后的浮动 Toast 气泡 */
+    .toast-tip {
+      position: fixed;
+      top: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 2000;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* 萌娃悬浮呼吸动画定义 */
+    @keyframes petFloat {
+      0% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-8px) scale(1.03); }
+      100% { transform: translateY(0px) scale(1); }
+    }
+
+    /* 每日自动换造型的 AI 萌娃小宠物样式（已绑定呼吸动画） */
     .ai-pet {
       position: fixed;
       right: 16px; bottom: 20px;
@@ -198,6 +241,7 @@
       overflow: hidden;
       display: flex; align-items: center; justify-content: center;
       transition: transform 0.2s;
+      animation: petFloat 3s ease-in-out infinite; /* 3秒一个周期，无限呼吸浮动 */
     }
     .ai-pet:active { transform: scale(0.92); }
     .ai-pet img {
@@ -215,6 +259,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Toast 提示框 -->
+  <div id="toast" class="toast-tip">📋 代码已复制，可粘贴搜股票</div>
 
   <!-- 顶部仪表盘 -->
   <div class="header">
@@ -289,7 +336,7 @@
     <span style="font-size: 12px; opacity: 0.7;">(整合财联社、三大证券报、东方财富、雪球与巨潮资讯网)</span>
   </div>
 
-  <!-- 自动轮播萌娃小宠物悬浮按钮 -->
+  <!-- 自动轮播且带有呼吸浮动动画的萌娃小宠物悬浮按钮 -->
   <div class="ai-pet" onclick="openAiPetChat()" title="点击听萌娃问候">
     <img id="pet-avatar" src="p1.jpg" alt="萌娃理财助手" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%23ff85a2\'/><text x=\'50%\' y=\'55%\' font-size=\'24\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'white\'>👧</text></svg>'">
   </div>
@@ -340,7 +387,7 @@
     const threeStocks = [
       {
         name: "中芯国际",
-        code: "(688981)",
+        raw_code: "688981",
         badge: "热门龙头",
         badge_class: "badge-red",
         desc: "晶圆代工龙头，受益于芯片复苏与国产替代。",
@@ -352,7 +399,7 @@
       },
       {
         name: "XX精工",
-        code: "(787001)",
+        raw_code: "787001",
         badge: "今日申购",
         badge_class: "badge-orange",
         desc: "高端半导体设备部件制造，今日开放网上申购。",
@@ -364,7 +411,7 @@
       },
       {
         name: "YY智能",
-        code: "(301502)",
+        raw_code: "301502",
         badge: "明日申购",
         badge_class: "badge-blue",
         desc: "工业机器人伺服系统供应商，成长属性强。",
@@ -376,6 +423,7 @@
       }
     ];
 
+    // 渲染股票列表，整合一键复制代码按钮
     const container = document.getElementById('stock-list-container');
     threeStocks.forEach((item, index) => {
       container.innerHTML += `
@@ -383,7 +431,9 @@
           <div class="stock-header">
             <div>
               <span class="stock-name">${item.name}</span>
-              <span class="stock-code">${item.code}</span>
+              <button class="stock-code-btn" onclick="copyStockCode('${item.raw_code}')" title="点击复制代码">
+                (${item.raw_code}) 📋 复制
+              </button>
             </div>
             <span class="badge ${item.badge_class}">${item.badge}</span>
           </div>
@@ -393,6 +443,32 @@
       `;
     });
 
+    // 复制代码的通用函数
+    function copyStockCode(code) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToast(`📋 代码 ${code} 已复制`);
+      }).catch(err => {
+        // 兼容备用复制方案
+        const input = document.createElement('input');
+        input.value = code;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast(`📋 代码 ${code} 已复制`);
+      });
+    }
+
+    // 显示 Toast 气泡提示
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      toast.innerText = text;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2000);
+    }
+
     function openNewsDetail(index) {
       const item = newsData[index];
       showModal(item.title, item.detail, item.related);
@@ -400,7 +476,7 @@
 
     function openStockDetail(index) {
       const item = threeStocks[index];
-      showModal(`${item.name} ${item.code} 详细介绍`, item.detail, item.related);
+      showModal(`${item.name} (${item.raw_code}) 详细介绍`, item.detail, item.related);
     }
 
     function showModal(title, detail, related) {
