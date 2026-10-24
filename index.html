@@ -282,7 +282,7 @@
   <!-- 顶部仪表盘 -->
   <div class="header">
     <div>
-      <h1 id="today-date">Stock-Today 早报</h1>
+      <h1 id="today-date">10月24日 Stock-Today</h1>
       <p>爸、妈，今日权威财经与新股资讯已更新</p>
     </div>
     <div class="brand-logo">PRO</div>
@@ -294,7 +294,21 @@
     <div class="market-grid">
       <div class="market-item">
         <div class="market-name">道琼斯指数</div>
-        <div class="market-val up">+0.52%</div>
+        <div class="market-val down">-0.21%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">纳斯达克</div>
+        <div class="market-val up">+1.29%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">离岸人民币</div>
+        <div class="market-val down">7.24</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">布伦特原油</div>
+        <div class="market-val up">+0.53%</div>
+      </div>
+    </div>
       </div>
       <div class="market-item">
         <div class="market-name">纳斯达克</div>
@@ -317,7 +331,7 @@
       <span>💡</span> DeepSeek AI 今日观盘指南
     </div>
     <div class="summary-content" id="today-summary">
-      政策暖风频吹，市场板块轮动加快，建议逢低布局优质龙头，切勿盲目追高。
+      半导体有订单，红利稳，消费暖，拿好别追高。
     </div>
   </div>
 
@@ -383,7 +397,7 @@
         related: [
           { source: "财联社", title: "AI芯片需求爆发，产业链多家公司业绩喜人", url: "https://www.cls.cn/" },
           { source: "东方财富网", title: "半导体板块大涨，机构资金最新研判出炉", url: "https://www.eastmoney.com/" },
-          { source: "雪球热帖", title: "深度解析：芯片产业链哪些龙头最具长线价值？", url: "https://xueqiu.com/" }
+          { source: "雪球热帖", title: "深度解析：芯片产业链哪些龙头最具长线价值？", url: "https://xueqiu.com/" },
         ]
       },
       {
@@ -391,7 +405,7 @@
         detail: "据巨潮资讯网官方公告与上海证券报分析，政策意图在于提振市场信心，稳定宏观经济预期，高股息银行及公用事业板块红利效应显著。",
         related: [
           { source: "巨潮资讯网", title: "金融支持实体经济最新政策公告汇总", url: "http://www.cninfo.com.cn/" },
-          { source: "证券时报", title: "流动性合理充裕，红利资产受机构青睐", url: "http://www.stcn.com/" }
+          { source: "证券时报", title: "流动性合理充裕，红利资产受机构青睐", url: "http://www.stcn.com/" },
         ]
       },
       {
@@ -399,9 +413,9 @@
         detail: "中国证券报头版文章指出，随着各项促消费政策落地见效，大消费龙头企业盈利逐季改善，长线配置价值逐步凸显。",
         related: [
           { source: "中国证券报", title: "促消费政策效果显现，文旅餐饮双双回暖", url: "http://www.cs.com.cn/" },
-          { source: "雪球讨论", title: "消费股还值得持有吗？看这篇就够了", url: "https://xueqiu.com/" }
+          { source: "雪球讨论", title: "消费股还值得持有吗？看这篇就够了", url: "https://xueqiu.com/" },
         ]
-      }
+      },
     ];
 
     const threeStocks = [
@@ -418,6 +432,18 @@
         ]
       },
       {
+        name: "科创智能",
+        raw_code: "301502",
+        badge: "今日申购",
+        badge_class: "badge-orange",
+        desc: "工业机器人伺服系统供应商，发行价合理。",
+        detail: "【公司简介】科创智能（301502）主营业务稳健，机构关注度高。\n\n【关注理由】工业机器人伺服系统供应商，发行价合理。\n\n【风险提示】市场有风险，投资需谨慎。",
+        related: [
+          { source: "巨潮资讯网", title: "科创智能最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
+          { source: "财联社", title: "今日申购：机构最新深度研报", url: "https://www.cls.cn/" }
+        ]
+      },
+      {
         name: "华海精工",
         raw_code: "787001",
         badge: "今日申购",
@@ -429,18 +455,6 @@
           { source: "财联社", title: "今日申购：机构最新深度研报", url: "https://www.cls.cn/" }
         ]
       },
-      {
-        name: "科创智能",
-        raw_code: "301502",
-        badge: "今日申购",
-        badge_class: "badge-orange",
-        desc: "工业机器人伺服系统供应商，发行价合理。",
-        detail: "【公司简介】科创智能（301502）主营业务稳健，机构关注度高。\n\n【关注理由】工业机器人伺服系统供应商，发行价合理。\n\n【风险提示】市场有风险，投资需谨慎。",
-        related: [
-          { source: "巨潮资讯网", title: "科创智能最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
-          { source: "财联社", title: "今日申购：机构最新深度研报", url: "https://www.cls.cn/" }
-        ]
-      }
     ];
 
     const container = document.getElementById('stock-list-container');
