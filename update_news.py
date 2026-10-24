@@ -50,12 +50,12 @@ def fetch_global_markets():
         "nas": f"{'+' if nas_change > 0 else ''}{nas_change}%",
         "nas_class": "up" if nas_change >= 0 else "down",
         "cny": f"{cny_val}",
-        "cny_class": "down", # 汇率通常绿涨红跌或中性，这里统一展示
+        "cny_class": "down",
         "oil": f"{'+' if oil_change > 0 else ''}{oil_change}%",
         "oil_class": "up" if oil_change >= 0 else "down"
     }
 
-# 2. 动态生成今日要闻与多源深度解读
+# 2. 动态生成今日要闻与多源深度解读 (保持 3 条)
 def fetch_multi_source_news():
     news_pool = [
         {
@@ -93,10 +93,9 @@ def fetch_multi_source_news():
             ]
         }
     ]
-    # 随机打乱或每天轮换展示不同组合
     return news_pool
 
-# 3. 动态生成市场热点与新股关注
+# 3. 动态生成市场热点与新股关注 (精选 3 条)
 def fetch_hot_stocks():
     stocks_pool = [
         {"name": "中芯国际", "code": "688981", "type": "热门龙头", "badge_class": "badge-red", "desc": "晶圆代工龙头，受益于芯片复苏与国产替代。"},
@@ -105,7 +104,7 @@ def fetch_hot_stocks():
         {"name": "星际科技", "code": "787003", "type": "明日申购", "badge_class": "badge-blue", "desc": "算力服务器散热模块龙头，成长性突出。"},
         {"name": "迈瑞医疗", "code": "301505", "type": "新股日历", "badge_class": "badge-purple", "desc": "创新医疗器械企业，拥有多项核心自主专利。"}
     ]
-    return random.sample(stocks_pool, 3) # 每次随机精选3条
+    return random.sample(stocks_pool, 3)
 
 def update_index_html():
     today = datetime.date.today()
@@ -127,7 +126,7 @@ def update_index_html():
 
         # 2. 替换全球大盘数据
         market_pattern = r'(<div class="card-title">\s*🌐 隔夜全球大盘风向\s*</div>\s*<div class="market-grid">).*?(</div>\s*</div>)'
-        new_market_html = f"""\1
+        new_market_html = f"""\\1
       <div class="market-item">
         <div class="market-name">道琼斯指数</div>
         <div class="market-val {markets['dow_class']}">{markets['dow']}</div>
@@ -144,14 +143,14 @@ def update_index_html():
         <div class="market-name">布伦特原油</div>
         <div class="market-val {markets['oil_class']}">{markets['oil']}</div>
       </div>
-    \2"""
+    \\2"""
         html_content = re.sub(market_pattern, new_market_html, html_content, flags=re.DOTALL)
 
         # 3. 替换 AI 观盘指南
         summary_pattern = r'(<div class="summary-content" id="today-summary">\s*).*?(\s*</div>)'
         html_content = re.sub(summary_pattern, f'\\1{summary_text}\\2', html_content, flags=re.DOTALL)
 
-        # 4. 替换今日要闻列表
+        # 4. 替换今日要闻列表 (渲染 3 条)
         news_items_html = ""
         for i, news in enumerate(news_list):
             news_items_html += f"""
@@ -166,14 +165,11 @@ def update_index_html():
         news_pattern = r'(<ul class="news-list">).*?(</ul>\s*</div>)'
         html_content = re.sub(news_pattern, f'\\1{news_items_html}\n    \\2', html_content, flags=re.DOTALL)
 
-        # 5. 动态注入前端 JS 数据变量（确保弹窗与股票数据同步更新）
+        # 5. 动态注入前端 JS 数据变量
         # 更新 newsData
         news_js_str = "    const newsData = [\n"
         for news in news_list:
-            news_js_str += f"""      {{
-        title: "{news['title']}",
-        detail: "{news['detail']}",
-        related: [\n"""
+            news_js_str += f"""      {{\n        title: "{news['title']}",\n        detail: "{news['detail']}",\n        related: [\n"""
             for link in news['related_links']:
                 news_js_str += f"""          {{ source: "{link['source']}", title: "{link['title']}", url: "{link['url']}" }},\n"""
             news_js_str += "        ]\n      },\n"
@@ -184,18 +180,7 @@ def update_index_html():
         # 更新 threeStocks
         stocks_js_str = "    const threeStocks = [\n"
         for stock in stocks:
-            stocks_js_str += f"""      {{
-        name: "{stock['name']}",
-        raw_code: "{stock['code']}",
-        badge: "{stock['type']}",
-        badge_class: "{stock['badge_class']}",
-        desc: "{stock['desc']}",
-        detail: "【公司简介】{stock['name']}（{stock['code']}）主营业务稳健，机构关注度高。\\n\\n【关注理由】{stock['desc']}\\n\\n【风险提示】市场有风险，投资需谨慎。",
-        related: [
-          {{ source: "巨潮资讯网", title: "{stock['name']}最新公告及财报解读", url: "http://www.cninfo.com.cn/" }},
-          {{ source: "财联社", title: "{stock['type']}：机构最新深度研报", url: "https://www.cls.cn/" }}
-        ]
-      }},\n"""
+            stocks_js_str += f"""      {{\n        name: "{stock['name']}",\n        raw_code: "{stock['code']}",\n        badge: "{stock['type']}",\n        badge_class: "{stock['badge_class']}",\n        desc: "{stock['desc']}",\n        detail: "【公司简介】{stock['name']}（{stock['code']}）主营业务稳健，机构关注度高。\\\\n\\\\n【关注理由】{stock['desc']}\\\\n\\\\n【风险提示】市场有风险，投资需谨慎。",\n        related: [\n          {{ source: "巨潮资讯网", title: "{stock['name']}最新公告及财报解读", url: "http://www.cninfo.com.cn/" }},\n          {{ source: "财联社", title: "{stock['type']}：机构最新深度研报", url: "https://www.cls.cn/" }}\n        ]\n      }},\n"""
         stocks_js_str += "    ];"
 
         html_content = re.sub(r'    const threeStocks = \[.*?\];', stocks_js_str, html_content, flags=re.DOTALL)
@@ -203,7 +188,7 @@ def update_index_html():
         with open("index.html", "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"成功更新 index.html！AI指南：{summary_text}")
+        print(f"成功更新 index.html！AI观盘指南：{summary_text}")
     else:
         print("未找到 index.html 文件")
 
