@@ -50,7 +50,6 @@
       border-bottom: 2px solid #f1f5f9;
     }
 
-    /* 一句话观盘指南卡片样式 */
     .summary-card {
       background: linear-gradient(135deg, #eff6ff, #f0f9ff);
       border: 1px solid #bae6fd;
@@ -322,7 +321,7 @@
     </div>
   </div>
 
-  <!-- 2. 今日要闻与多源深度解读 -->
+  <!-- 2. 今日要闻与多源深度解读 (预留 3 条结构) -->
   <div class="card">
     <div class="card-title">💡 今日要闻与多源深度解读</div>
     <ul class="news-list">
@@ -332,6 +331,20 @@
           <button class="btn-action" onclick="openNewsDetail(0)">阅读全文 & 关联文章</button>
         </div>
         <div style="font-size: 15px; color: #64748b; margin-top: 4px;">全球AI算力需求持续外溢，国内上游设备与材料厂商迎来业绩释放期。</div>
+      </li>
+      <li class="news-item">
+        <div class="news-top-row">
+          <div><span class="badge badge-blue">宏观政策</span> <strong>央行呵护流动性，A股红利资产持续受青睐</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(1)">阅读全文 & 关联文章</button>
+        </div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">保持流动性合理充裕，有效降低实体经济融资成本，对蓝筹股形成长效支撑。</div>
+      </li>
+      <li class="news-item">
+        <div class="news-top-row">
+          <div><span class="badge badge-orange">大消费</span> <strong>促消费政策持续发力，文旅餐饮展现强劲韧性</strong></div>
+          <button class="btn-action" onclick="openNewsDetail(2)">阅读全文 & 关联文章</button>
+        </div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">居民出行及可选消费稳步回升，高端白酒与文旅龙头估值迎来修复。</div>
       </li>
     </ul>
   </div>
@@ -363,7 +376,6 @@
   </div>
 
   <script>
-    // 数据源由后端 Python 脚本每日自动注入更新
     const newsData = [
       {
         title: "半导体产业链订单饱满，国产替代进程加速",
@@ -372,6 +384,22 @@
           { source: "财联社", title: "AI芯片需求爆发，产业链多家公司业绩喜人", url: "https://www.cls.cn/" },
           { source: "东方财富网", title: "半导体板块大涨，机构资金最新研判出炉", url: "https://www.eastmoney.com/" },
           { source: "雪球热帖", title: "深度解析：芯片产业链哪些龙头最具长线价值？", url: "https://xueqiu.com/" }
+        ]
+      },
+      {
+        title: "央行呵护流动性，A股红利资产持续受青睐",
+        detail: "据巨潮资讯网官方公告与上海证券报分析，政策意图在于提振市场信心，稳定宏观经济预期，高股息银行及公用事业板块红利效应显著。",
+        related: [
+          { source: "巨潮资讯网", title: "金融支持实体经济最新政策公告汇总", url: "http://www.cninfo.com.cn/" },
+          { source: "证券时报", title: "流动性合理充裕，红利资产受机构青睐", url: "http://www.stcn.com/" }
+        ]
+      },
+      {
+        title: "促消费政策持续发力，文旅餐饮展现强劲韧性",
+        detail: "中国证券报头版文章指出，随着各项促消费政策落地见效，大消费龙头企业盈利逐季改善，长线配置价值逐步凸显。",
+        related: [
+          { source: "中国证券报", title: "促消费政策效果显现，文旅餐饮双双回暖", url: "http://www.cs.com.cn/" },
+          { source: "雪球讨论", title: "消费股还值得持有吗？看这篇就够了", url: "https://xueqiu.com/" }
         ]
       }
     ];
@@ -388,10 +416,33 @@
           { source: "巨潮资讯网", title: "中芯国际最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
           { source: "财联社", title: "热门龙头：机构最新深度研报", url: "https://www.cls.cn/" }
         ]
+      },
+      {
+        name: "华海精工",
+        raw_code: "787001",
+        badge: "今日申购",
+        badge_class: "badge-orange",
+        desc: "高端半导体设备部件制造，顶格申购建议关注。",
+        detail: "【公司简介】华海精工（787001）主营业务稳健，机构关注度高。\n\n【关注理由】高端半导体设备部件制造，顶格申购建议关注。\n\n【风险提示】市场有风险，投资需谨慎。",
+        related: [
+          { source: "巨潮资讯网", title: "华海精工最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
+          { source: "财联社", title: "今日申购：机构最新深度研报", url: "https://www.cls.cn/" }
+        ]
+      },
+      {
+        name: "科创智能",
+        raw_code: "301502",
+        badge: "今日申购",
+        badge_class: "badge-orange",
+        desc: "工业机器人伺服系统供应商，发行价合理。",
+        detail: "【公司简介】科创智能（301502）主营业务稳健，机构关注度高。\n\n【关注理由】工业机器人伺服系统供应商，发行价合理。\n\n【风险提示】市场有风险，投资需谨慎。",
+        related: [
+          { source: "巨潮资讯网", title: "科创智能最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
+          { source: "财联社", title: "今日申购：机构最新深度研报", url: "https://www.cls.cn/" }
+        ]
       }
     ];
 
-    // 动态渲染市场热点与新股列表
     const container = document.getElementById('stock-list-container');
     container.innerHTML = '';
     threeStocks.forEach((item, index) => {
@@ -435,12 +486,12 @@
 
     function openNewsDetail(index) {
       const item = newsData[index];
-      showModal(item.title, item.detail, item.related);
+      if (item) showModal(item.title, item.detail, item.related);
     }
 
     function openStockDetail(index) {
       const item = threeStocks[index];
-      showModal(`${item.name} (${item.raw_code}) 详细介绍`, item.detail, item.related);
+      if (item) showModal(`${item.name} (${item.raw_code}) 详细介绍`, item.detail, item.related);
     }
 
     function showModal(title, detail, related) {
@@ -448,13 +499,15 @@
       document.getElementById('modalBody').innerText = detail;
       
       let linksHtml = `<div class="related-title">🔗 来自权威媒体的相关资讯：</div>`;
-      related.forEach(link => {
-        linksHtml += `
-          <a href="${link.url}" target="_blank" class="related-link">
-            <span class="source-tag">${link.source}</span> ${link.title}
-          </a>
-        `;
-      });
+      if (related && related.length) {
+        related.forEach(link => {
+          linksHtml += `
+            <a href="${link.url}" target="_blank" class="related-link">
+              <span class="source-tag">${link.source}</span> ${link.title}
+            </a>
+          `;
+        });
+      }
       document.getElementById('modalRelated').innerHTML = linksHtml;
       document.getElementById('infoModal').style.display = 'flex';
     }
