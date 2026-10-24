@@ -14,27 +14,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3[cite: 7]
 
       - name: 配置 Python 环境
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v4[cite: 7]
         with:
-          python-version: '3.x'
+          python-version: '3.x'[cite: 7]
 
       - name: 安装依赖包
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip[cite: 7]
           pip install requests beautifulsoup4 openai
 
       - name: 运行更新脚本
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: python update_news.py
+        run: python update_news.py[cite: 7]
 
       - name: 提交并推送更新到仓库
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git add .
-          git diff-index --quiet HEAD || git commit -m "🤖 自动更新每日理财早报资讯 [$(date +'%Y-%m-%d')]"
-          git push
+          git config --global user.name "GitHub Action"[cite: 7]
+          git config --global user.email "action@github.com"[cite: 7]
+          git add .[cite: 7]
+          git diff-index --quiet HEAD || git commit -m "🤖 自动更新每日理财早报资讯 [$(date +'%Y-%m-%d')]"[cite: 7]
+          git push[cite: 7]
