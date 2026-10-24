@@ -132,6 +132,7 @@
     .badge-red { background: #fee2e2; color: #dc2626; }
     .badge-blue { background: #e0f2fe; color: #0284c7; }
     .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-purple { background: #f3e8ff; color: #7e22ce; }
 
     .stock-list { list-style: none; }
     .stock-item {
@@ -165,9 +166,7 @@
       font-weight: 600;
       transition: background 0.15s;
     }
-    .stock-code-btn:active {
-      background: #dbeafe;
-    }
+    .stock-code-btn:active { background: #dbeafe; }
 
     .stock-desc { font-size: 15px; color: #475569; line-height: 1.5; margin-bottom: 12px; }
     
@@ -265,10 +264,7 @@
       animation: petFloat 3s ease-in-out infinite;
     }
     .ai-pet:active { transform: scale(0.92); }
-    .ai-pet img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
+    .ai-pet img { width: 100%; height: 100%; object-fit: cover; }
 
     .footer-tip {
       text-align: center;
@@ -316,13 +312,13 @@
     </div>
   </div>
 
-  <!-- 新增：“一句话观盘指南”卡片 -->
+  <!-- 一句话观盘指南卡片 -->
   <div class="summary-card">
     <div class="summary-header">
       <span>💡</span> DeepSeek AI 今日观盘指南
     </div>
     <div class="summary-content" id="today-summary">
-      芯片AI强势，央行放水护盘，消费回暖，稳持龙头不追高。
+      政策暖风频吹，市场板块轮动加快，建议逢低布局优质龙头，切勿盲目追高。
     </div>
   </div>
 
@@ -332,31 +328,15 @@
     <ul class="news-list">
       <li class="news-item">
         <div class="news-top-row">
-          <div><span class="badge badge-red">半导体</span> <strong>芯片巨头业绩超预期，算力需求爆发</strong></div>
+          <div><span class="badge badge-red">半导体</span> <strong>半导体产业链订单饱满，国产替代进程加速</strong></div>
           <button class="btn-action" onclick="openNewsDetail(0)">阅读全文 & 关联文章</button>
         </div>
-        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">全球AI算力需求强劲，国内产业链设备与材料订单饱满。</div>
-      </li>
-
-      <li class="news-item">
-        <div class="news-top-row">
-          <div><span class="badge badge-blue">宏观政策</span> <strong>央行公开市场净投放，保持流动性充裕</strong></div>
-          <button class="btn-action" onclick="openNewsDetail(1)">阅读全文 & 关联文章</button>
-        </div>
-        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">降低实体经济融资成本，对高股息蓝筹与银行板块形成支撑。</div>
-      </li>
-
-      <li class="news-item">
-        <div class="news-top-row">
-          <div><span class="badge badge-orange">大消费</span> <strong>消费与文旅复苏，龙头业绩逐季向好</strong></div>
-          <button class="btn-action" onclick="openNewsDetail(2)">阅读全文 & 关联文章</button>
-        </div>
-        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">居民出行及可选消费回升，餐饮、旅游及高端白酒稳健复苏。</div>
+        <div style="font-size: 15px; color: #64748b; margin-top: 4px;">全球AI算力需求持续外溢，国内上游设备与材料厂商迎来业绩释放期。</div>
       </li>
     </ul>
   </div>
 
-  <!-- 3. 市场热点与新股关注 (精选3条) -->
+  <!-- 3. 市场热点与新股关注 -->
   <div class="card">
     <div class="card-title">⭐ 市场热点与新股关注</div>
     <div class="stock-list" id="stock-list-container"></div>
@@ -367,7 +347,7 @@
     <span style="font-size: 12px; opacity: 0.7;">(整合财联社、三大证券报、东方财富、雪球与巨潮资讯网)</span>
   </div>
 
-  <!-- 自动轮播且带有呼吸浮动动画的萌娃小宠物悬浮按钮 -->
+  <!-- 萌娃小宠物悬浮按钮 -->
   <div class="ai-pet" onclick="openAiPetChat()" title="点击听萌娃问候">
     <img id="pet-avatar" src="p1.jpg" alt="萌娃理财助手" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%23ff85a2\'/><text x=\'50%\' y=\'55%\' font-size=\'24\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'white\'>👧</text></svg>'">
   </div>
@@ -383,34 +363,15 @@
   </div>
 
   <script>
-    const now = new Date();
-    document.getElementById('today-date').innerText = 
-      `${now.getMonth() + 1}月${now.getDate()}日 Stock-Today`;
-
+    // 数据源由后端 Python 脚本每日自动注入更新
     const newsData = [
       {
-        title: "芯片巨头业绩超预期，AI算力需求爆发",
-        detail: "全球AI算力需求强劲，国内产业链设备与材料订单饱满。根据三大证券报及财联社最新分析，芯片龙头业绩大幅增长，设备厂商迎来新一轮补库存周期。",
+        title: "半导体产业链订单饱满，国产替代进程加速",
+        detail: "根据财联社及三大证券报最新报道，半导体产业链上下游产能扩张明显，受益于AI算力与消费电子复苏双轮驱动，行业景气度不断向好。",
         related: [
           { source: "财联社", title: "AI芯片需求爆发，产业链多家公司业绩喜人", url: "https://www.cls.cn/" },
           { source: "东方财富网", title: "半导体板块大涨，机构资金最新研判出炉", url: "https://www.eastmoney.com/" },
-          { source: "雪球社区", title: "深度解析：芯片产业链哪些龙头最具长线价值？", url: "https://xueqiu.com/" }
-        ]
-      },
-      {
-        title: "央行公开市场净投放，保持流动性充裕",
-        detail: "央行通过公开市场逆回购操作保持流动性合理充裕。据巨潮资讯网官方公告与上海证券报分析，政策意图在于提振实体经济融资需求，红利资产与高股息板块直接受益。",
-        related: [
-          { source: "巨潮资讯网", title: "金融支持实体经济最新政策公告汇总", url: "http://www.cninfo.com.cn/" },
-          { source: "上海证券报", title: "流动性合理充裕，红利资产受机构青睐", url: "https://www.cnstock.com/" }
-        ]
-      },
-      {
-        title: "消费与文旅市场复苏，龙头业绩逐季向好",
-        detail: "中国证券报头版文章指出，随着促消费政策落地见效，大消费龙头估值修复空间打开，可选消费与餐饮酒旅板块盈利能力持续提升。",
-        related: [
-          { source: "中国证券报", title: "促消费政策效果显现，文旅餐饮双双回暖", url: "http://www.cs.com.cn/" },
-          { source: "雪球社区", title: "大消费板块反弹，长线投资者如何布局？", url: "https://xueqiu.com/" }
+          { source: "雪球热帖", title: "深度解析：芯片产业链哪些龙头最具长线价值？", url: "https://xueqiu.com/" }
         ]
       }
     ];
@@ -422,39 +383,17 @@
         badge: "热门龙头",
         badge_class: "badge-red",
         desc: "晶圆代工龙头，受益于芯片复苏与国产替代。",
-        detail: "【公司简介】国内领先的晶圆代工企业，专注于半导体制造。\n\n【关注理由】AI算力与消费电子复苏带动产能利用率提升，近期获机构重点关注。\n\n【风险提示】行业竞争及外部技术环境变化。",
+        detail: "【公司简介】中芯国际（688981）主营业务稳健，机构关注度高。\n\n【关注理由】晶圆代工龙头，受益于芯片复苏与国产替代。\n\n【风险提示】市场有风险，投资需谨慎。",
         related: [
-          { source: "巨潮资讯网", title: "中芯国际最新业绩说明会投资者问答", url: "http://www.cninfo.com.cn/" },
-          { source: "财联社", title: "芯片代工产能吃紧，龙头迎来估值重塑", url: "https://www.cls.cn/" }
-        ]
-      },
-      {
-        name: "XX精工",
-        raw_code: "787001",
-        badge: "今日申购",
-        badge_class: "badge-orange",
-        desc: "高端半导体设备部件制造，今日开放网上申购。",
-        detail: "【申购指南】申购代码：787001 | 发行价：28.5元/股。\n\n【主营业务】半导体精密零部件制造，产品打破国外垄断。\n\n【打新建议】发行估值合理，基本面优异，建议符合条件的账户积极申购。",
-        related: [
-          { source: "东方财富", title: "XX精工新股申购指南及中签率预测", url: "https://www.eastmoney.com/" },
-          { source: "证券时报", title: "新股前瞻：半导体零部件新星强势登场", url: "http://www.stcn.com/" }
-        ]
-      },
-      {
-        name: "YY智能",
-        raw_code: "301502",
-        badge: "明日申购",
-        badge_class: "badge-blue",
-        desc: "工业机器人伺服系统供应商，成长属性强。",
-        detail: "【申购指南】申购代码：301502 | 发行价：19.8元/股。\n\n【主营业务】自动化伺服驱动与控制系统研发。\n\n【关注理由】受益于智能制造与机器人产业爆发，订单增速显著。",
-        related: [
-          { source: "雪球社区", title: "YY智能基本面深度拆解：机器人核心资产", url: "https://xueqiu.com/" },
-          { source: "中国证券报", title: "自动化赛道迎新成员，YY智能明日申购", url: "http://www.cs.com.cn/" }
+          { source: "巨潮资讯网", title: "中芯国际最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
+          { source: "财联社", title: "热门龙头：机构最新深度研报", url: "https://www.cls.cn/" }
         ]
       }
     ];
 
+    // 动态渲染市场热点与新股列表
     const container = document.getElementById('stock-list-container');
+    container.innerHTML = '';
     threeStocks.forEach((item, index) => {
       container.innerHTML += `
         <div class="stock-item">
@@ -491,9 +430,7 @@
       const toast = document.getElementById('toast');
       toast.innerText = text;
       toast.style.display = 'block';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 2000);
+      setTimeout(() => { toast.style.display = 'none'; }, 2000);
     }
 
     function openNewsDetail(index) {
@@ -527,46 +464,17 @@
     }
 
     const dailyPetConfig = {
-      1: {
-        avatar: "p1.jpg",
-        greeting: "👧 周一嘟嘴打气萌娃",
-        message: "爸、妈，新的一周开始啦！今天虽然是周一，但看盘也要保持好心情哦，不急不躁，稳扎稳打~ 嘟嘟嘴给你打气！"
-      },
-      2: {
-        avatar: "p2.jpg",
-        greeting: "🕶️ 周二酷酷墨镜萌娃",
-        message: "戴上墨镜，谁都不爱！爸妈今天看盘要理性冷静哦，市场波动不用怕，有我陪着您俩看权威分析！"
-      },
-      3: {
-        avatar: "p3.jpg",
-        greeting: "😏 周三偷笑萌娃",
-        message: "周三一周过半啦！今天理财早报里的要闻我帮您看过了，有不少利好消息呢，今天也要稳稳开心呀~"
-      },
-      4: {
-        avatar: "p4.png",
-        greeting: "😉 周四眨眼萌娃",
-        message: "眨个眼送好运！周四看盘放松心态，新股申购别忘了看准提示再动手，祝爸爸妈妈今天好运连连！"
-      },
-      5: {
-        avatar: "p5.png",
-        greeting: "😄 周五大笑萌娃",
-        message: "耶！周五啦！马上就要迎周末啦，看盘轻松一点，不管涨跌都别影响心情，周末准备带爸妈吃大餐~"
-      },
-      0: {
-        avatar: "p5.png",
-        greeting: "❤️ 周日陪伴萌娃",
-        message: "周末股市休市，爸爸妈妈好好休息放松一下，今天多喝水、多散步，准备迎接新的一周！"
-      },
-      6: {
-        avatar: "p3.jpg",
-        greeting: "🌸 周六开心萌娃",
-        message: "周六愉快！今天不看盘，祝爸爸妈妈周末充实开心，好好享受休闲时光~"
-      }
+      1: { avatar: "p1.jpg", greeting: "👧 周一嘟嘴打气萌娃", message: "爸、妈，新的一周开始啦！今天看盘保持好心情，稳扎稳打~ 嘟嘟嘴给你打气！" },
+      2: { avatar: "p2.jpg", greeting: "🕶️ 周二酷酷墨镜萌娃", message: "戴上墨镜，理性冷静！市场波动不用怕，有我陪着您俩看权威分析！" },
+      3: { avatar: "p3.jpg", greeting: "😏 周三偷笑萌娃", message: "周三过半啦！今天早报里的要闻有很多利好，今天也要稳稳开心呀~" },
+      4: { avatar: "p4.png", greeting: "😉 周四眨眼萌娃", message: "眨个眼送好运！新股申购看准提示再动手，祝爸爸妈妈今天好运连连！" },
+      5: { avatar: "p5.png", greeting: "😄 周五大笑萌娃", message: "耶！周五啦！周末快到啦，看盘轻松一点，不管涨跌都别影响心情~" },
+      0: { avatar: "p5.png", greeting: "❤️ 周日陪伴萌娃", message: "周末股市休市，爸爸妈妈好好休息放松，多喝水多散步！" },
+      6: { avatar: "p3.jpg", greeting: "🌸 周六开心萌娃", message: "周六愉快！今天不看盘，祝爸爸妈妈周末充实开心，好好享受休闲时光~" }
     };
 
     const currentDay = new Date().getDay();
     const todayPet = dailyPetConfig[currentDay] || dailyPetConfig[1];
-
     document.getElementById('pet-avatar').src = todayPet.avatar;
 
     function openAiPetChat() {
