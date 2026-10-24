@@ -2,12 +2,11 @@ name: 每日自动更新 Stock-Today 理财早报
 
 on:
   schedule:
-    # 每天北京时间早上 7:00 自动运行 (对应 UTC 时间 23:00)
     - cron: '0 23 * * *'
-  workflow_dispatch: # 支持在 GitHub 手动点击立即运行
+  workflow_dispatch:
 
 permissions:
-  contents: write # 赋予 Actions 写入提交仓库的权限
+  contents: write
 
 jobs:
   build-and-update:
@@ -21,15 +20,13 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: 安装依赖包
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 openai
-
-      - name: 运行更新脚本
+      - name: 安装依赖并运行更新脚本
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: python update_news.py
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests beautifulsoup4 openai
+          python update_news.py
 
       - name: 提交并推送更新到仓库
         run: |
