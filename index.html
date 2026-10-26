@@ -282,7 +282,7 @@
   <!-- 顶部仪表盘 -->
   <div class="header">
     <div>
-      <h1 id="today-date">10月25日 Stock-Today</h1>
+      <h1 id="today-date">10月26日 Stock-Today</h1>
       <p>爸、妈，今日权威财经与新股资讯已更新</p>
     </div>
     <div class="brand-logo">PRO</div>
@@ -294,7 +294,21 @@
     <div class="market-grid">
       <div class="market-item">
         <div class="market-name">道琼斯指数</div>
-        <div class="market-val up">+0.55%</div>
+        <div class="market-val up">+0.58%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">纳斯达克</div>
+        <div class="market-val down">-0.52%</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">离岸人民币</div>
+        <div class="market-val down">7.22</div>
+      </div>
+      <div class="market-item">
+        <div class="market-name">布伦特原油</div>
+        <div class="market-val down">-0.91%</div>
+      </div>
+    </div>
       </div>
       <div class="market-item">
         <div class="market-name">纳斯达克</div>
@@ -345,7 +359,7 @@
       <span>💡</span> DeepSeek AI 今日观盘指南
     </div>
     <div class="summary-content" id="today-summary">
-      半导体热莫追高，红利稳可长持，消费回暖慢慢来。
+      科技消费有支撑，红利稳健，拿好别追高。
     </div>
   </div>
 
@@ -434,27 +448,27 @@
 
     const threeStocks = [
       {
-        name: "华海精工",
-        raw_code: "787001",
-        badge: "今日申购",
-        badge_class: "badge-orange",
-        desc: "高端半导体设备部件制造，顶格申购建议关注。",
-        detail: "【公司简介】华海精工（787001）主营业务稳健，机构关注度高。\n\n【关注理由】高端半导体设备部件制造，顶格申购建议关注。\n\n【风险提示】市场有风险，投资需谨慎。",
+        name: "中芯国际",
+        raw_code: "688981",
+        badge: "热门龙头",
+        badge_class: "badge-red",
+        desc: "晶圆代工龙头，受益于芯片复苏与国产替代。",
+        detail: "【公司简介】中芯国际（688981）主营业务稳健，机构关注度高。\n\n【关注理由】晶圆代工龙头，受益于芯片复苏与国产替代。\n\n【风险提示】市场有风险，投资需谨慎。",
         related: [
-          { source: "巨潮资讯网", title: "华海精工最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
-          { source: "财联社", title: "今日申购：机构最新深度研报", url: "https://www.cls.cn/" }
+          { source: "巨潮资讯网", title: "中芯国际最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
+          { source: "财联社", title: "热门龙头：机构最新深度研报", url: "https://www.cls.cn/" }
         ]
       },
       {
-        name: "迈瑞医疗",
-        raw_code: "301505",
-        badge: "新股日历",
-        badge_class: "badge-purple",
-        desc: "创新医疗器械企业，拥有多项核心自主专利。",
-        detail: "【公司简介】迈瑞医疗（301505）主营业务稳健，机构关注度高。\n\n【关注理由】创新医疗器械企业，拥有多项核心自主专利。\n\n【风险提示】市场有风险，投资需谨慎。",
+        name: "星际科技",
+        raw_code: "787003",
+        badge: "明日申购",
+        badge_class: "badge-blue",
+        desc: "算力服务器散热模块龙头，成长性突出。",
+        detail: "【公司简介】星际科技（787003）主营业务稳健，机构关注度高。\n\n【关注理由】算力服务器散热模块龙头，成长性突出。\n\n【风险提示】市场有风险，投资需谨慎。",
         related: [
-          { source: "巨潮资讯网", title: "迈瑞医疗最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
-          { source: "财联社", title: "新股日历：机构最新深度研报", url: "https://www.cls.cn/" }
+          { source: "巨潮资讯网", title: "星际科技最新公告及财报解读", url: "http://www.cninfo.com.cn/" },
+          { source: "财联社", title: "明日申购：机构最新深度研报", url: "https://www.cls.cn/" }
         ]
       },
       {
